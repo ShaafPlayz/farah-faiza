@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Zarab Collections</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html" >HOME</a></li>
+                <li><a href="shop.html" class="active">SHOP</a></li>
+                <!-- <li><a href="#">NEW ARRIVALS</a></li>
+                <li><a href="#">PRINT COLLECTION</a></li>
+                <li><a href="#">SUMMER COLLECTION</a></li>
+                <li><a href="#">WINTER COLLECTION</a></li>
+                <li><a href="#">KIDS COLLECTION</a></li> -->
+            </ul>
+        </nav>
+        <div class="logo">
+            <a href="index.html">
+                <h1>Zarab Collections</h1>
+            </a>
+        </div>
+        <div class="nav-icons">
+            <a href="#" aria-label="Account"><i class="fas fa-user"></i></a>
+            <a href="#" aria-label="Search"><i class="fas fa-search"></i></a>
+            <a href="#" aria-label="Shopping Bag"><i class="fas fa-shopping-bag"></i></a>
+        </div>
+    </header>
+
+    <!-- Announcement Bar -->
+    
+
+    <!-- Shop Page Banner -->
+    <section class="shop-banner">
+        <div class="shop-banner-content">
+            <h1>OUR COLLECTION</h1>
+            <p>Elegance for every occasion</p>
+        </div>
+    </section>
+
+    <!-- Shop Content -->
+    <div class="shop-container">
+        <!-- Filters Sidebar -->
+        <aside class="shop-filters">
+            <div class="filter-section">
+                <h3>Categories</h3>
+                <ul class="filter-list">
+                    <li><a href="#">All Products</a></li>
+                    <li><a href="#">Dresses</a></li>
+                    <li><a href="#">Tops</a></li>
+                    <li><a href="#">Bottoms</a></li>
+                    <li><a href="#">Outerwear</a></li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h3>Collections</h3>
+                <ul class="filter-list">
+                    <li><a href="#">Summer Collection</a></li>
+                    <li><a href="#">Winter Collection</a></li>
+                    <li><a href="#">Print Collection</a></li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h3>Price</h3>
+                <ul class="filter-list">
+                    <li><a href="#">Under Rs. 2,000</a></li>
+                    <li><a href="#">Rs. 2,000 - Rs. 4,000</a></li>
+                    <li><a href="#">Rs. 4,000 - Rs. 6,000</a></li>
+                    <li><a href="#">Above Rs. 6,000</a></li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h3>Size</h3>
+                <div class="size-options">
+                    <a href="#" class="size-option">XS</a>
+                    <a href="#" class="size-option">S</a>
+                    <a href="#" class="size-option">M</a>
+                    <a href="#" class="size-option">L</a>
+                    <a href="#" class="size-option">XL</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Products Grid -->
+        <main class="shop-products">
+            <div class="shop-header">
+                <div class="results-count">Showing 1-12 of 36 products</div>
+                <div class="sort-options">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by" name="sort-by">
+                        <option value="newest">Newest</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="popular">Popularity</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-1.jpg" alt="Floral Print Dress">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Floral Print Dress</h3>
+                        <p class="product-price">Rs. 4,990</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-2.jpg" alt="Silk Blouse">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Silk Blouse</h3>
+                        <p class="product-price">Rs. 3,490</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-3.jpg" alt="Tailored Pants">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Tailored Pants</h3>
+                        <p class="product-price">Rs. 3,990</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-4.jpg" alt="Embroidered Top">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Embroidered Top</h3>
+                        <p class="product-price">Rs. 2,990</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-5.jpg" alt="Maxi Dress">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Maxi Dress</h3>
+                        <p class="product-price">Rs. 5,490</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-6.jpg" alt="Printed Scarf">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Printed Scarf</h3>
+                        <p class="product-price">Rs. 1,490</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-7.jpg" alt="Wide Leg Pants">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Wide Leg Pants</h3>
+                        <p class="product-price">Rs. 4,290</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-8.jpg" alt="Linen Shirt">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Linen Shirt</h3>
+                        <p class="product-price">Rs. 2,790</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-9.jpg" alt="Pleated Skirt">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Pleated Skirt</h3>
+                        <p class="product-price">Rs. 3,290</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-10.jpg" alt="Cashmere Sweater">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Cashmere Sweater</h3>
+                        <p class="product-price">Rs. 6,990</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-11.jpg" alt="Wrap Dress">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Wrap Dress</h3>
+                        <p class="product-price">Rs. 4,790</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="images/product-12.jpg" alt="Cotton Tee">
+                        <div class="product-overlay">
+                            <a href="#" class="quick-view" aria-label="Quick view"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="add-to-cart" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Cotton Tee</h3>
+                        <p class="product-price">Rs. 1,990</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <a href="#" class="page-link active">1</a>
+                <a href="#" class="page-link">2</a>
+                <a href="#" class="page-link">3</a>                <a href="#" class="page-link next" aria-label="Next page">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>About ZARAB</h3>
+                <p>ZARAB Collections is a premium ready-to-wear women's clothing brand offering elegant, contemporary designs for the modern woman.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping &amp; Returns</a></li>
+                    <li><a href="#">Size Guide</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <p>Email: info@zarabcollections.com</p>
+                <p>Phone: +92 311 1234567</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 ZARAB Collections. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
