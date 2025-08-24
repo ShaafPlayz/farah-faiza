@@ -1,0 +1,13 @@
+# Docker Compose file for Farah-Faiza Next.js application
+# This defines the web service that matches the deployment workflow
+
+services:
+  web:
+    image: ShaafDev/terriblemistake:latest
+    environment:
+      NODE_ENV: production
+    ports:
+      - "80:3000"
+    restart: unless-stopped
+
+
