@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
+import styles from './ImageUpload.module.css'
 
 interface ImageUploadProps {
   currentImageData?: string
@@ -62,31 +63,31 @@ export default function ImageUpload({ currentImageData, onImageChange, onError }
   }
 
   return (
-    <div className="space-y-4">
-      <label className="block text-sm font-medium text-gray-700">
+    <div className={styles.container}>
+      <label className={styles.label}>
         Product Image *
       </label>
       
       {preview ? (
-        <div className="space-y-4">
-          <div className="relative w-full h-64 border rounded-lg overflow-hidden">
+        <div className={styles.previewContainer}>
+          <div className={styles.previewImage}>
             <Image
               src={preview}
               alt="Product preview"
               fill
-              className="object-cover"
+              className={styles.previewImageInner}
             />
           </div>
-          <div className="flex gap-2">
+          <div className={styles.buttonGroup}>
             <div
               {...getRootProps()}
-              className="flex-1 cursor-pointer"
+              className={styles.changeButton}
             >
               <input {...getInputProps()} />
               <button
                 type="button"
                 disabled={uploading}
-                className="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 disabled:opacity-50 transition-colors"
+                className={styles.changeButtonInner}
               >
                 {uploading ? 'Processing...' : 'Change Image'}
               </button>
@@ -95,7 +96,7 @@ export default function ImageUpload({ currentImageData, onImageChange, onError }
               type="button"
               onClick={handleRemoveImage}
               disabled={uploading}
-              className="px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-50 transition-colors"
+              className={styles.removeButton}
             >
               Remove
             </button>
@@ -104,31 +105,33 @@ export default function ImageUpload({ currentImageData, onImageChange, onError }
       ) : (
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+          className={`${styles.dropzone} ${
             isDragActive
-              ? 'border-secondary bg-secondary/10'
+              ? styles.active
               : uploading
-              ? 'border-gray-200 bg-gray-50'
-              : 'border-gray-300 hover:border-secondary hover:bg-gray-50'
+              ? styles.uploading
+              : styles.inactive
           }`}
         >
           <input {...getInputProps()} />
-          <div className="space-y-4">
-            <div className="mx-auto w-12 h-12 text-gray-400">
-              <i className={`fas text-4xl ${uploading ? 'fa-spinner fa-spin' : isDragActive ? 'fa-cloud-upload-alt text-secondary' : 'fa-image'}`}></i>
+          <div className={styles.dropzoneContent}>
+            <div className={`${styles.iconContainer} ${
+              uploading ? styles.uploading : isDragActive ? styles.active : ''
+            }`}>
+              <i className={`fas ${uploading ? 'fa-spinner' : isDragActive ? 'fa-cloud-upload-alt' : 'fa-image'}`}></i>
             </div>
-            <div>
-              <p className="text-lg font-medium text-gray-900">
+            <div className={styles.textContent}>
+              <p className={styles.primary}>
                 {uploading ? 'Processing...' : isDragActive ? 'Drop the image here' : 'Upload product image'}
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className={styles.secondary}>
                 {uploading ? 'Please wait...' : 'Drag & drop or click to select (PNG, JPG, GIF up to 2MB)'}
               </p>
             </div>
             {!uploading && !isDragActive && (
               <button
                 type="button"
-                className="bg-primary text-white px-6 py-2 rounded hover:bg-secondary hover:text-black transition-colors"
+                className={styles.chooseButton}
               >
                 Choose Image
               </button>

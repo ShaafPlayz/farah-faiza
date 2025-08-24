@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase, type Product } from '@/lib/supabase'
 import ProductForm from './ProductForm'
 import ProductList from './ProductList'
+import styles from './Dashboard.module.css'
 
 interface DashboardProps {
   user: any
@@ -71,20 +72,20 @@ export default function Dashboard({ user }: DashboardProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={styles.container}>
       {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-primary font-medium text-primary">Zarab Collections</h1>
-              <p className="text-sm text-gray-600">Admin Dashboard</p>
+      <header className={styles.header}>
+        <div className={styles.headerContainer}>
+          <div className={styles.headerContent}>
+            <div className={styles.titleContainer}>
+              <h1>Zarab Collections</h1>
+              <p>Admin Dashboard</p>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {user.email}</span>
+            <div className={styles.userSection}>
+              <span>Welcome, {user.email}</span>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+                className={styles.logoutButton}
               >
                 Logout
               </button>
@@ -94,28 +95,24 @@ export default function Dashboard({ user }: DashboardProps) {
       </header>
 
       {/* Navigation */}
-      <nav className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+      <nav className={styles.navigation}>
+        <div className={styles.navigationContainer}>
+          <div className={styles.navigationTabs}>
             <button
               onClick={() => {
                 setActiveTab('products')
                 setEditingProduct(null)
               }}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'products'
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              className={`${styles.tabButton} ${
+                activeTab === 'products' ? styles.active : styles.inactive
               }`}
             >
               Products
             </button>
             <button
               onClick={() => setActiveTab('add')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'add'
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              className={`${styles.tabButton} ${
+                activeTab === 'add' ? styles.active : styles.inactive
               }`}
             >
               {editingProduct ? 'Edit Product' : 'Add Product'}
@@ -125,8 +122,8 @@ export default function Dashboard({ user }: DashboardProps) {
       </nav>
 
       {/* Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+      <main className={styles.main}>
+        <div className={styles.content}>
           {activeTab === 'products' && (
             <ProductList
               products={products}

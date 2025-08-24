@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import styles from './Hero.module.css'
 
 const slides = [
   {
@@ -48,20 +49,22 @@ export default function Hero() {
   }
 
   return (
-    <section className="hero relative h-[80vh] overflow-hidden">
-      <div className="hero-slides h-full">
+    <section className={`hero ${styles.hero}`}>
+      <div className={`hero-slides ${styles.heroSlides}`}>
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`hero-slide absolute inset-0 transition-opacity duration-1000 ${
+            className={`hero-slide ${styles.heroSlide} ${
               index === currentSlide ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <div className="hero-image h-full w-full relative">
+            <div className={`hero-image ${styles.heroImage}`}>
               <div className="hero-content">
-                <h1>{slide.title}</h1>
-                <p>{slide.subtitle}</p>
-                <Link href="/shop" className="btn btn-primary">
+                <div className="hero-text">
+                  <h1>{slide.title}</h1>
+                  <p>{slide.subtitle}</p>
+                </div>
+                <Link href="/shop" className="btn btn-primary hero-button">
                   {slide.buttonText}
                 </Link>
               </div>
@@ -70,7 +73,6 @@ export default function Hero() {
                   src={slide.image}
                   alt="Hero image"
                   fill
-                  className="object-cover"
                   priority={index === 0}
                 />
               )}
@@ -81,7 +83,7 @@ export default function Hero() {
       
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-5 transform -translate-y-1/2 bg-black/50 text-white border-none w-12 h-12 rounded-full flex items-center justify-center text-lg cursor-pointer z-30 transition-all duration-300 hover:bg-secondary"
+        className={`${styles.navButton} ${styles.prevButton}`}
         aria-label="Previous slide"
       >
         <i className="fas fa-chevron-left"></i>
@@ -89,7 +91,7 @@ export default function Hero() {
       
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-5 transform -translate-y-1/2 bg-black/50 text-white border-none w-12 h-12 rounded-full flex items-center justify-center text-lg cursor-pointer z-30 transition-all duration-300 hover:bg-secondary"
+        className={`${styles.navButton} ${styles.nextButton}`}
         aria-label="Next slide"
       >
         <i className="fas fa-chevron-right"></i>

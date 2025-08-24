@@ -1,0 +1,260 @@
+/* ProductList CSS Module */
+
+.loadingContainer {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.loadingSpinner {
+  animation: spin 1s linear infinite;
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+  border-bottom: 2px solid var(--color-secondary);
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .header {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.headerContent {
+  flex: 1 1 auto;
+}
+
+@media (min-width: 640px) {
+  .headerContent {
+    flex: 1 1 auto;
+  }
+}
+
+.title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.description {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #374151;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.emptyState p {
+  color: #6b7280;
+}
+
+.tableContainer {
+  margin-top: 2rem;
+  overflow: hidden;
+}
+
+.tableWrapper {
+  margin: -0.5rem -1rem;
+  overflow-x: auto;
+}
+
+@media (min-width: 640px) {
+  .tableWrapper {
+    margin: -0.5rem -1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tableWrapper {
+    margin: -0.5rem -2rem;
+  }
+}
+
+.tableInner {
+  display: inline-block;
+  min-width: 100%;
+  padding: 0.5rem 0;
+  vertical-align: middle;
+}
+
+@media (min-width: 640px) {
+  .tableInner {
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tableInner {
+    padding: 0.5rem 2rem;
+  }
+}
+
+.tableShadow {
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  ring: 1px;
+  ring-color: rgba(0, 0, 0, 0.05);
+  ring-opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .tableShadow {
+    border-radius: 0.5rem;
+  }
+}
+
+.table {
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.tableHead {
+  background-color: #f9fafb;
+}
+
+.tableHeaderCell {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tableBody {
+  background-color: white;
+}
+
+.tableRow {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tableCell {
+  padding: 1rem 1.5rem;
+  white-space: nowrap;
+}
+
+.productInfo {
+  display: flex;
+  align-items: center;
+}
+
+.productImage {
+  flex-shrink: 0;
+  height: 4rem;
+  width: 4rem;
+  position: relative;
+}
+
+.productImageImg {
+  height: 4rem;
+  width: 4rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.productDetails {
+  margin-left: 1rem;
+}
+
+.productName {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.productDescription {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #6b7280;
+}
+
+.categoryText {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #111827;
+}
+
+.priceText {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #111827;
+}
+
+.collectionText {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #111827;
+}
+
+.actionsCell {
+  padding: 1rem 1.5rem;
+  white-space: nowrap;
+  text-align: right;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+.editButton {
+  color: var(--color-secondary);
+  text-decoration: none;
+  margin-right: 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.editButton:hover {
+  color: var(--color-primary);
+}
+
+.deleteButton {
+  color: #dc2626;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.deleteButton:hover {
+  color: #7f1d1d;
+}
+
+.hiddenHeader {
+  position: relative;
+  padding: 0.75rem 1.5rem;
+}
+
+.hiddenHeader span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

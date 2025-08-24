@@ -1,0 +1,164 @@
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 32px;
+  z-index: 50;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1150px;
+}
+
+.logo img {
+  object-fit: contain;
+}
+
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: 32px;
+}
+
+@media (min-width: 769px) {
+  .desktopNav {
+    display: flex;
+  }
+}
+
+.nav {
+  display: flex;
+}
+
+.navLinks {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: #374151;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: #111827;
+}
+
+.navLinkActive {
+  color: #111827;
+}
+
+.navIcons {
+  display: flex;
+  gap: 20px;
+}
+
+.navIcon {
+  font-size: 14px;
+  color: #374151;
+  transition: color 0.3s ease;
+}
+
+.navIcon:hover {
+  color: #111827;
+}
+
+.mobileMenuButton {
+  display: block;
+  background: none;
+  border: none;
+  color: #374151;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.mobileMenuButton:hover {
+  color: #111827;
+}
+
+@media (min-width: 769px) {
+  .mobileMenuButton {
+    display: none;
+  }
+}
+
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+@media (min-width: 769px) {
+  .mobileMenu {
+    display: none;
+  }
+}
+
+.mobileNav {
+  padding: 16px 0;
+}
+
+.mobileNavList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobileNavLink {
+  display: block;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: #374151;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.mobileNavLink:hover {
+  color: #111827;
+  background-color: #f9fafb;
+}
+
+.mobileNavLinkActive {
+  color: #111827;
+  background-color: #f9fafb;
+}
+
+.mobileMenuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+@media (min-width: 769px) {
+  .mobileMenuOverlay {
+    display: none;
+  }
+}

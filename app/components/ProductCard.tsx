@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { Product } from '@/lib/supabase'
+import styles from './ProductCard.module.css'
 
 interface ProductCardProps {
   product: Product
@@ -10,15 +11,14 @@ export default function ProductCard({ product }: ProductCardProps) {
   const imageSrc = product.image_data || product.image_url
 
   return (
-    <div className="product-card">
-      <div className="product-image">
+    <div className={`product-card ${styles.productCard}`}>
+      <div className={`product-image ${styles.productImage}`}>
         <Image
           src={imageSrc}
           alt={product.name}
           fill
-          className="object-cover"
         />
-        <div className="product-overlay">
+        <div className={`product-overlay ${styles.productOverlay}`}>
           <a href="#" className="quick-view" aria-label="Quick view">
             <i className="fas fa-eye"></i>
           </a>
@@ -27,9 +27,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           </a>
         </div>
       </div>
-      <div className="product-info">
+      <div className={`product-info ${styles.productInfo}`}>
         <h3>{product.name}</h3>
-        <p className="product-price">Rs. {product.price.toLocaleString()}</p>
+        <p className={`product-price ${styles.productPrice}`}>Rs. {product.price.toLocaleString()}</p>
       </div>
     </div>
   )

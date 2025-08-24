@@ -1,0 +1,195 @@
+/* ProductForm CSS Module */
+
+.container {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border-radius: 0.5rem;
+}
+
+.cardContent {
+  padding: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .cardContent {
+    padding: 1.5rem;
+  }
+}
+
+.title {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.errorMessage {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.input {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.textarea {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  resize: vertical;
+}
+
+.textarea:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.select {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  background-color: white;
+}
+
+.select:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.sizeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sizeButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  background-color: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.sizeButton:hover {
+  background-color: #f9fafb;
+}
+
+.sizeButton.selected {
+  background-color: var(--color-secondary);
+  color: black;
+  border-color: var(--color-secondary);
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.cancelButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #374151;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.cancelButton:hover {
+  background-color: #f9fafb;
+}
+
+.submitButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: white;
+  background-color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.submitButton:hover {
+  background-color: var(--color-secondary);
+  color: black;
+}
+
+.submitButton:focus {
+  outline: none;
+  ring: 2px;
+  ring-offset: 2px;
+  ring-color: var(--color-secondary);
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

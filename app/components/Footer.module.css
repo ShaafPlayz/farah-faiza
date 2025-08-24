@@ -1,0 +1,19 @@
+.footer {
+  background: #6e224a;
+  color: white;
+  padding: 32px 0;
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.copyright {
+  font-size: 1rem;
+  color: #ffffff71;
+  font-weight: 600;
+  font-family: "Lemon Milk";
+}

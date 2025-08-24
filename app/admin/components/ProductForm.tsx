@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase, type Product } from '@/lib/supabase'
 import ImageUpload from './ImageUpload'
+import styles from './ProductForm.module.css'
 
 interface ProductFormProps {
   product?: Product | null
@@ -126,50 +127,50 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.cardContent}>
+          <h3 className={styles.title}>
             {product ? 'Edit Product' : 'Add New Product'}
           </h3>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+            <div className={styles.errorMessage}>
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.fieldGroup}>
+              <label htmlFor="name" className={styles.label}>
                 Product Name
               </label>
               <input
                 type="text"
                 id="name"
                 required
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-secondary focus:border-secondary"
+                className={styles.input}
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               />
             </div>
 
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+            <div className={styles.fieldGroup}>
+              <label htmlFor="description" className={styles.label}>
                 Description
               </label>
               <textarea
                 id="description"
                 required
                 rows={3}
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-secondary focus:border-secondary"
+                className={styles.textarea}
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
               />
             </div>
 
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+            <div className={styles.fieldGroup}>
+              <label htmlFor="price" className={styles.label}>
                 Price (Rs.)
               </label>
               <input
@@ -178,7 +179,7 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
                 required
                 min="0"
                 step="0.01"
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-secondary focus:border-secondary"
+                className={styles.input}
                 value={formData.price}
                 onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
               />
@@ -190,14 +191,14 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
               onError={handleImageError}
             />
 
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+            <div className={styles.fieldGroup}>
+              <label htmlFor="category" className={styles.label}>
                 Category
               </label>
               <select
                 id="category"
                 required
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-secondary focus:border-secondary"
+                className={styles.select}
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
               >
@@ -209,33 +210,31 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
               </select>
             </div>
 
-            <div>
-              <label htmlFor="collection" className="block text-sm font-medium text-gray-700">
+            <div className={styles.fieldGroup}>
+              <label htmlFor="collection" className={styles.label}>
                 Collection (Optional)
               </label>
               <input
                 type="text"
                 id="collection"
-                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-secondary focus:border-secondary"
+                className={styles.input}
                 value={formData.collection}
                 onChange={(e) => setFormData(prev => ({ ...prev, collection: e.target.value }))}
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className={styles.fieldGroup}>
+              <label className={styles.label}>
                 Available Sizes
               </label>
-              <div className="flex flex-wrap gap-2">
+              <div className={styles.sizeContainer}>
                 {['XS', 'S', 'M', 'L', 'XL'].map(size => (
                   <button
                     key={size}
                     type="button"
                     onClick={() => handleSizeToggle(size)}
-                    className={`px-4 py-2 border rounded ${
-                      formData.sizes.includes(size)
-                        ? 'bg-secondary text-black border-secondary'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                    className={`${styles.sizeButton} ${
+                      formData.sizes.includes(size) ? styles.selected : ''
                     }`}
                   >
                     {size}
@@ -244,18 +243,18 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
               </div>
             </div>
 
-            <div className="flex justify-end space-x-3">
+            <div className={styles.buttonGroup}>
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className={styles.cancelButton}
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-secondary hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary disabled:opacity-50"
+                className={styles.submitButton}
               >
                 {loading ? 'Saving...' : product ? 'Update Product' : 'Add Product'}
               </button>

@@ -3,17 +3,25 @@
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ProductCard from '../components/ProductCard'
 import { supabase, type Product } from '@/lib/supabase'
+import styles from './page.module.css'
 
 export default function Shop() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
   const [sortBy, setSortBy] = useState('newest')
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const categories = useMemo(() => [
+    { key: 'all', label: 'All' },
+    { key: 'dresses', label: 'Dresses' },
+    { key: 'tops', label: 'Tops' },
+    { key: 'bottoms', label: 'Bottoms' }
+  ], [])
 
   useEffect(() => {
     fetchProducts()
@@ -118,11 +126,11 @@ export default function Shop() {
 
   if (loading) {
     return (
-      <main>
+      <main className={styles.main}>
         <Header />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary mx-auto mb-4"></div>
+        <div className={styles.loading}>
+          <div className={styles.loadingContent}>
+            <div className={styles.spinner}></div>
             <p>Loading products...</p>
           </div>
         </div>
@@ -132,84 +140,82 @@ export default function Shop() {
   }
 
   return (
-    <main>
+    <main className={styles.main}>
       <Header />
-      
-      {/* Shop Banner */}
-      <section className="shop-banner" style={{backgroundImage: 'url(/images/shop-banner.jpg)'}}>
-        <div className="shop-banner-content">
-          <h1>OUR COLLECTION</h1>
-          <p>Elegance for every occasion</p>
+
+      {/* Vibrant hero */}
+      <section className={styles.hero}> 
+        <div className={styles.heroInner}>
+          <h1 className={styles.heroTitle}>Shop The Collection</h1>
+          <p className={styles.heroTagline}>Fresh drops, handcrafted details & seasonal colors.</p>
+          <div className={styles.chipRow} aria-label="Quick category filters">
+            {categories.map(cat => (
+              <button
+                key={cat.key}
+                onClick={() => setFilter(cat.key)}
+                className={`${styles.chip} ${filter === cat.key ? styles.chipActive : ''}`}
+              >{cat.label}</button>
+            ))}
+          </div>
         </div>
+        <div className={styles.heroBackdrop} aria-hidden="true" />
       </section>
-      
-      {/* Shop Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 py-12 px-[5%]">
-        {/* Filters Sidebar */}
-        <aside className="lg:col-span-1 p-5 bg-light">
-          <div className="filter-section">
-            <h3>Categories</h3>
-            <ul className="filter-list">
-              <li>
-                <button 
-                  onClick={() => setFilter('all')}
-                  className={`text-left w-full hover:text-secondary ${filter === 'all' ? 'text-secondary' : ''}`}
-                >
-                  All Products
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setFilter('dresses')}
-                  className={`text-left w-full hover:text-secondary ${filter === 'dresses' ? 'text-secondary' : ''}`}
-                >
-                  Dresses
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setFilter('tops')}
-                  className={`text-left w-full hover:text-secondary ${filter === 'tops' ? 'text-secondary' : ''}`}
-                >
-                  Tops
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setFilter('bottoms')}
-                  className={`text-left w-full hover:text-secondary ${filter === 'bottoms' ? 'text-secondary' : ''}`}
-                >
-                  Bottoms
-                </button>
-              </li>
+
+      {/* Main content */}
+      <div className={styles.shell}>
+        {/* Mobile filter toggle */}
+        <div className={styles.mobileFilterToggle}>
+          <button 
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className={styles.filterToggleBtn}
+            aria-expanded={filtersOpen}
+          >
+            <span>Filters</span>
+            <svg 
+              className={`${styles.filterIcon} ${filtersOpen ? styles.filterIconOpen : ''}`}
+              width="16" height="16" viewBox="0 0 24 24" fill="none"
+            >
+              <path d="M3 7H21L19 9H5L3 7Z" fill="currentColor"/>
+              <path d="M6 12H18L16 14H8L6 12Z" fill="currentColor"/>
+              <path d="M9 17H15L13 19H11L9 17Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+
+        <aside className={`${styles.sidebar} ${filtersOpen ? styles.sidebarOpen : ''}`} aria-label="Filters">
+          <div className={styles.panel}>
+            <h3 className={styles.panelTitle}>Categories</h3>
+            <ul className={styles.verticalList}>
+              {categories.map(cat => (
+                <li key={cat.key}>
+                  <button
+                    onClick={() => setFilter(cat.key)}
+                    className={`${styles.filterButton} ${filter === cat.key ? styles.filterButtonActive : ''}`}
+                  >{cat.label}</button>
+                </li>
+              ))}
             </ul>
           </div>
-          
-          <div className="filter-section">
-            <h3>Size</h3>
-            <div className="flex flex-wrap gap-2">
-              {['XS', 'S', 'M', 'L', 'XL'].map(size => (
-                <a key={size} href="#" className="size-option">
-                  {size}
-                </a>
+          <div className={styles.panel}>
+            <h3 className={styles.panelTitle}>Size</h3>
+            <div className={styles.sizeGrid}>
+              {['XS','S','M','L','XL'].map(size => (
+                <button key={size} className={styles.sizeBtn} aria-label={`Filter size ${size}`}>{size}</button>
               ))}
             </div>
           </div>
         </aside>
-        
-        {/* Products Grid */}
-        <main className="lg:col-span-3">
-          <div className="flex justify-between items-center mb-8">
-            <div className="text-sm text-gray">
-              Showing 1-{sortedProducts.length} of {sortedProducts.length} products
-            </div>
-            <div className="flex items-center gap-2">
-              <label htmlFor="sort-by" className="text-sm">Sort by:</label>
-              <select 
-                id="sort-by" 
+
+        <section className={styles.productsArea}>
+          <div className={styles.toolbar}>
+            <div className={styles.productCount}>Showing {sortedProducts.length} product{sortedProducts.length!==1 && 's'}</div>
+            <div className={styles.sortContainer}>
+              <label htmlFor="sort-by" className={styles.sortLabel}>Sort</label>
+              <select
+                id="sort-by"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="p-2 border border-light-gray"
+                onChange={(e)=>setSortBy(e.target.value)}
+                className={styles.sortSelect}
               >
                 <option value="newest">Newest</option>
                 <option value="price-low">Price: Low to High</option>
@@ -218,26 +224,20 @@ export default function Shop() {
               </select>
             </div>
           </div>
-          
-          <div className="products-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <div className={`${styles.productsGrid}`}>
+            {sortedProducts.map(p => <ProductCard key={p.id} product={p} />)}
           </div>
-          
           {sortedProducts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray text-lg">No products found.</p>
+            <div className={styles.noProducts}>
+              <p className={styles.noProductsText}>No products found.</p>
             </div>
           )}
-          
-          {/* Pagination */}
-          <div className="pagination">
-            <a href="#" className="page-link active">1</a>
-          </div>
-        </main>
+          <nav className={styles.pagination} aria-label="Pagination">
+            <button className={`${styles.pageLink} ${styles.pageLinkActive}`}>1</button>
+          </nav>
+        </section>
       </div>
-      
+
       <Footer />
     </main>
   )

@@ -1,0 +1,163 @@
+/* Dashboard CSS Module */
+
+.container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* Header Styles */
+.header {
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.headerContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .headerContainer {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .headerContainer {
+    padding: 0 2rem;
+  }
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+}
+
+.titleContainer h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.titleContainer p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #4b5563;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userSection span {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #4b5563;
+}
+
+.logoutButton {
+  background-color: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.logoutButton:hover {
+  background-color: #b91c1c;
+}
+
+/* Navigation Styles */
+.navigation {
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.navigationContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .navigationContainer {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .navigationContainer {
+    padding: 0 2rem;
+  }
+}
+
+.navigationTabs {
+  display: flex;
+  gap: 2rem;
+}
+
+.tabButton {
+  padding: 1rem 0.25rem;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.tabButton.active {
+  border-bottom-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.tabButton.inactive {
+  color: #6b7280;
+}
+
+.tabButton.inactive:hover {
+  color: #374151;
+  border-bottom-color: #d1d5db;
+}
+
+/* Main Content */
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .main {
+    padding: 1.5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.content {
+  padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .content {
+    padding: 1.5rem 0;
+  }
+}

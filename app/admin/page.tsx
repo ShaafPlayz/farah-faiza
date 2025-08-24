@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
+import styles from './page.module.css'
 
 export default function Admin() {
   const [user, setUser] = useState<any>(null)
@@ -38,9 +39,9 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary mx-auto mb-4"></div>
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingContent}>
+          <div className={styles.loadingSpinner}></div>
           <p>Loading...</p>
         </div>
       </div>
@@ -48,7 +49,7 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={styles.container}>
       {user ? <Dashboard user={user} /> : <Login />}
     </div>
   )
