@@ -31,7 +31,7 @@ FROM base as deps
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
     --mount=type=cache,target=/root/.local/share/pnpm/store \
-    pnpm install --prod --no-frozen-lockfile
+    pnpm install --prod --frozen-lockfile
 
 ################################################################################
 # Create a stage for building the application.
@@ -42,7 +42,7 @@ FROM deps as build
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
     --mount=type=cache,target=/root/.local/share/pnpm/store \
-    pnpm install --no-frozen-lockfile
+    pnpm install --frozen-lockfile
 
 # Copy the rest of the source files into the image.
 COPY . .
@@ -70,7 +70,7 @@ COPY --from=build /usr/src/app/. ./.
 
 
 # Expose the port that the application listens on.
-EXPOSE 3000
+EXPOSE 80
 
 # Run the application.
 CMD pnpm start
