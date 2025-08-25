@@ -1,6 +1,6 @@
 # Zarab Collections - Next.js E-commerce Application
 
-A modern e-commerce website for feminine ready-to-wear clothing built with Next.js, TypeScript, Tailwind CSS, and Supabase.
+A modern e-commerce website for feminine ready-to-wear clothing built with Next.js, TypeScript, and Supabase.
 
 ## Features
 
@@ -10,14 +10,15 @@ A modern e-commerce website for feminine ready-to-wear clothing built with Next.
 - **Product Management**: Add, edit, and delete products with images
 - **Responsive Design**: Mobile-friendly interface
 - **Database Integration**: Supabase for authentication and data storage
+- **Runtime Environment Variables**: Environment variables are only accessed at runtime, not during build
 
 ## Technologies Used
 
 - **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS with custom styles
+- **Styling**: Custom CSS Modules
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
-- **Deployment Ready**: Vercel-optimized
+- **Deployment**: Docker-ready with GitHub Actions CI/CD
 
 ## Getting Started
 
@@ -32,7 +33,7 @@ A modern e-commerce website for feminine ready-to-wear clothing built with Next.
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd zarab-collections
+   cd farah-faiza
    ```
 
 2. **Install dependencies**
@@ -42,11 +43,31 @@ A modern e-commerce website for feminine ready-to-wear clothing built with Next.
 
 3. **Set up environment variables**
    
-   Copy `.env.local` and update with your Supabase credentials:
+   Copy `.env.example` to `.env.local` and update with your Supabase credentials:
    ```bash
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   cp .env.example .env.local
    ```
+   
+   Edit `.env.local`:
+   ```bash
+   SUPABASE_URL=your_supabase_project_url
+   SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+## Environment Variables
+
+This application uses a runtime-only approach for environment variables to ensure builds can succeed in CI/CD environments without access to secrets.
+
+### Required Variables
+
+- `SUPABASE_URL`: Your Supabase project URL
+- `SUPABASE_ANON_KEY`: Your Supabase anonymous key
+
+### Development vs Production
+
+- **Development**: Use `.env.local` file
+- **Production**: Set environment variables in your deployment environment
+- **Build**: No environment variables required during build process
 
 4. **Run the development server**
    ```bash
@@ -206,27 +227,74 @@ zarab-collections/
 
 ## Deployment
 
-### Deploy to Vercel
+### Docker Deployment (Recommended)
 
-1. Push your code to GitHub
-2. Connect your GitHub repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy!
+This application is designed for Docker deployment with runtime environment variables:
+
+1. **Build the Docker image** (GitHub Actions handles this automatically)
+   ```bash
+   docker build -t your-app:latest .
+   ```
+
+2. **Set environment variables** on your server
+   ```bash
+   # Create .env file on your server
+   echo "SUPABASE_URL=https://your-project-id.supabase.co" >> .env
+   echo "SUPABASE_ANON_KEY=your-anon-key" >> .env
+   ```
+
+3. **Deploy with Docker Compose**
+   ```bash
+   docker compose up -d
+   ```
+
+### Manual Deployment
+
+1. **Build the application**
+   ```bash
+   npm run build
+   ```
+
+2. **Set environment variables** in your hosting environment
+   ```bash
+   export SUPABASE_URL=https://your-project-id.supabase.co
+   export SUPABASE_ANON_KEY=your-anon-key
+   ```
+
+3. **Start the application**
+   ```bash
+   npm start
+   ```
+
+### CI/CD with GitHub Actions
+
+The included GitHub Actions workflow:
+- Builds the Docker image without requiring environment variables
+- Deploys to your VPS automatically
+- Environment variables are set at runtime on the server
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Supabase connection errors**
-   - Verify your environment variables
+   - Verify your environment variables are set correctly
    - Check if your Supabase project is active
    - Ensure RLS policies are correctly set
 
-2. **Image loading issues**
+2. **Build failures in CI/CD**
+   - The build should now work without environment variables
+   - If still failing, check the Supabase client configuration
+
+3. **Runtime environment variable errors**
+   - Ensure `SUPABASE_URL` and `SUPABASE_ANON_KEY` are set in your deployment environment
+   - Check that environment variables are available to the Node.js process
+
+4. **Image loading issues**
    - Make sure image URLs are publicly accessible
    - Check the Next.js image optimization settings
 
-3. **Authentication issues**
+5. **Authentication issues**
    - Verify your Supabase auth configuration
    - Check if users are created in Supabase dashboard
 
@@ -234,8 +302,9 @@ zarab-collections/
 
 For issues and questions:
 1. Check the troubleshooting section above
-2. Review Supabase documentation
-3. Check Next.js documentation
+2. Review the `ENVIRONMENT_SETUP.md` file
+3. Review Supabase documentation
+4. Check Next.js documentation
 
 ## License
 
