@@ -53,9 +53,20 @@ const createMockClient = (): SupabaseClient => {
 const createSupabaseClient = (): SupabaseClient => {
   const { supabaseUrl, supabaseAnonKey } = getSupabaseConfig()
   
-  // Check if we're using placeholder values
-  if (supabaseUrl === DEFAULT_SUPABASE_URL || supabaseAnonKey === DEFAULT_SUPABASE_ANON_KEY) {
+  // Check if we're using placeholder values or if variables are missing
+  const isPlaceholder = supabaseUrl === DEFAULT_SUPABASE_URL || supabaseAnonKey === DEFAULT_SUPABASE_ANON_KEY
+  const isMissing = !supabaseUrl || !supabaseAnonKey || supabaseUrl === 'undefined' || supabaseAnonKey === 'undefined'
+  
+  if (isPlaceholder || isMissing) {
     if (process.env.NODE_ENV === 'production') {
+      console.error('Supabase config debug:', { 
+        supabaseUrl, 
+        supabaseAnonKey: supabaseAnonKey ? `${supabaseAnonKey.substring(0, 20)}...` : 'undefined',
+        DEFAULT_SUPABASE_URL,
+        isPlaceholder,
+        isMissing,
+        NODE_ENV: process.env.NODE_ENV
+      })
       throw new Error(
         'Missing Supabase environment variables in production. Please set SUPABASE_URL and SUPABASE_ANON_KEY environment variables.'
       )
