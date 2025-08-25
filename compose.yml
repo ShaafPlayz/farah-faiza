@@ -4,6 +4,8 @@
 services:
   web:
     image: ${DOCKER_USERNAME}/terriblemistake:latest
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
       # Supabase configuration - these should be set in your server environment
