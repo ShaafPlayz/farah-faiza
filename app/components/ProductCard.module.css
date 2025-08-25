@@ -3,6 +3,12 @@
   transition: all 0.3s ease;
 }
 
+.productLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 .productImage {
   position: relative;
   overflow: hidden;
@@ -23,7 +29,7 @@
   width: 100%;
   padding: 15px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   background-color: rgba(0, 0, 0, 0.7);
   transition: all 0.3s ease;
 }
@@ -36,14 +42,14 @@
   transform: scale(1.05);
 }
 
-.productOverlay a {
+.quickView {
   color: var(--color-white, white);
   font-size: 18px;
   transition: all 0.3s ease;
-  text-decoration: none;
+  cursor: pointer;
 }
 
-.productOverlay a:hover {
+.quickView:hover {
   color: var(--color-secondary, #C5A875);
 }
 

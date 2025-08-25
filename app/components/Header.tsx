@@ -1,14 +1,55 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import styles from './Header.module.css'
 
+interface CartItem {
+  id: number
+  name: string
+  price: number
+  image_url: string
+  size: string
+  quantity: number
+}
+
 export default function Header() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [cartItemCount, setCartItemCount] = useState(0)
+
+  useEffect(() => {
+    updateCartCount()
+    
+    // Listen for cart updates
+    const handleCartUpdate = () => {
+      updateCartCount()
+    }
+
+    // Custom event listener for cart updates
+    window.addEventListener('cartUpdated', handleCartUpdate)
+    
+    // Periodic check for cart updates (in case localStorage is modified elsewhere)
+    const interval = setInterval(updateCartCount, 1000)
+
+    return () => {
+      window.removeEventListener('cartUpdated', handleCartUpdate)
+      clearInterval(interval)
+    }
+  }, [])
+
+  const updateCartCount = () => {
+    try {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+      const count = cart.reduce((total: number, item: CartItem) => total + item.quantity, 0)
+      setCartItemCount(count)
+    } catch (error) {
+      console.error('Error reading cart:', error)
+      setCartItemCount(0)
+    }
+  }
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -58,8 +99,11 @@ export default function Header() {
             <Link href="#" aria-label="Search">
               <i className={`fas fa-search ${styles.navIcon}`}></i>
             </Link>
-            <Link href="#" aria-label="Shopping Bag">
+            <Link href="/cart" aria-label="Shopping Bag" className={styles.cartLink}>
               <i className={`fas fa-shopping-bag ${styles.navIcon}`}></i>
+              {cartItemCount > 0 && (
+                <span className={styles.cartBadge}>{cartItemCount}</span>
+              )}
             </Link>
           </div>
         </div>
@@ -117,11 +161,12 @@ export default function Header() {
               </li>
               <li>
                 <Link 
-                  href="#" 
+                  href="/cart" 
                   className={styles.mobileNavLink}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <i className="fas fa-shopping-bag" style={{marginRight: '12px'}}></i>BAG
+                  <i className="fas fa-shopping-bag" style={{marginRight: '12px'}}></i>
+                  BAG {cartItemCount > 0 && `(${cartItemCount})`}
                 </Link>
               </li>
             </ul>

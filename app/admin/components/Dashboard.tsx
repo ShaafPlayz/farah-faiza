@@ -4,7 +4,30 @@ import { useState, useEffect } from 'react'
 import { supabase, type Product } from '@/lib/supabase'
 import ProductForm from './ProductForm'
 import ProductList from './ProductList'
+import OrderList from './OrderList'
 import styles from './Dashboard.module.css'
+
+interface CartItem {
+  id: number
+  name: string
+  price: number
+  image_url: string
+  size: string
+  quantity: number
+}
+
+interface Order {
+  id: string
+  customer_name: string
+  customer_phone: string
+  customer_address: string
+  delivery_instructions: string
+  payment_method: string
+  total_amount: number
+  items: CartItem[]
+  order_date: string
+  status: string
+}
 
 interface DashboardProps {
   user: any
@@ -13,11 +36,14 @@ interface DashboardProps {
 export default function Dashboard({ user }: DashboardProps) {
   const [activeTab, setActiveTab] = useState('products')
   const [products, setProducts] = useState<Product[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
+  const [ordersLoading, setOrdersLoading] = useState(true)
 
   useEffect(() => {
     fetchProducts()
+    fetchOrders()
   }, [])
 
   async function fetchProducts() {
@@ -38,6 +64,31 @@ export default function Dashboard({ user }: DashboardProps) {
       setProducts([])
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function fetchOrders() {
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('order_date', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching orders:', error)
+        // Fallback to localStorage
+        const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+        setOrders(localOrders)
+      } else {
+        setOrders(data || [])
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      // Fallback to localStorage
+      const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+      setOrders(localOrders)
+    } finally {
+      setOrdersLoading(false)
     }
   }
 
@@ -67,6 +118,35 @@ export default function Dashboard({ user }: DashboardProps) {
         alert('Error deleting product')
       } else {
         fetchProducts()
+      }
+    }
+  }
+
+  async function handleDeleteOrder(id: string) {
+    if (confirm('Are you sure you want to delete this order?')) {
+      try {
+        const { error } = await supabase
+          .from('orders')
+          .delete()
+          .eq('id', id)
+
+        if (error) {
+          console.error('Error deleting order from database:', error)
+          // Fallback: remove from localStorage
+          const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+          const updatedOrders = localOrders.filter((order: Order) => order.id !== id)
+          localStorage.setItem('orders', JSON.stringify(updatedOrders))
+          setOrders(updatedOrders)
+        } else {
+          fetchOrders()
+        }
+      } catch (error) {
+        console.error('Error:', error)
+        // Fallback: remove from localStorage
+        const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+        const updatedOrders = localOrders.filter((order: Order) => order.id !== id)
+        localStorage.setItem('orders', JSON.stringify(updatedOrders))
+        setOrders(updatedOrders)
       }
     }
   }
@@ -110,6 +190,17 @@ export default function Dashboard({ user }: DashboardProps) {
               Products
             </button>
             <button
+              onClick={() => {
+                setActiveTab('orders')
+                setEditingProduct(null)
+              }}
+              className={`${styles.tabButton} ${
+                activeTab === 'orders' ? styles.active : styles.inactive
+              }`}
+            >
+              Orders ({orders.length})
+            </button>
+            <button
               onClick={() => setActiveTab('add')}
               className={`${styles.tabButton} ${
                 activeTab === 'add' ? styles.active : styles.inactive
@@ -130,6 +221,13 @@ export default function Dashboard({ user }: DashboardProps) {
               loading={loading}
               onEdit={handleEditProduct}
               onDelete={handleDeleteProduct}
+            />
+          )}
+          {activeTab === 'orders' && (
+            <OrderList
+              orders={orders}
+              loading={ordersLoading}
+              onDelete={handleDeleteOrder}
             />
           )}
           {activeTab === 'add' && (

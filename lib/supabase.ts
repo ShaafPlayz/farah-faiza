@@ -101,6 +101,30 @@ export type Product = {
   updated_at: string
 }
 
+export type CartItem = {
+  id: number
+  name: string
+  price: number
+  image_url: string
+  size: string
+  quantity: number
+}
+
+export type Order = {
+  id: string
+  customer_name: string
+  customer_phone: string
+  customer_address: string
+  delivery_instructions?: string
+  payment_method: string
+  total_amount: number
+  items: CartItem[]
+  order_date: string
+  status: string
+  created_at?: string
+  updated_at?: string
+}
+
 export type Seller = {
   id: string
   email: string
