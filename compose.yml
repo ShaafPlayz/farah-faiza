@@ -3,7 +3,7 @@
 
 services:
   web:
-    image: ShaafDev/terriblemistake:latest
+    image: ${DOCKER_USERNAME}/terriblemistake:latest
     environment:
       NODE_ENV: production
       # Supabase configuration - these should be set in your server environment
