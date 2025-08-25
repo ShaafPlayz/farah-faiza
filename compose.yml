@@ -4,14 +4,10 @@
 services:
   web:
     image: ${DOCKER_USERNAME}/terriblemistake:latest
+    env_file:
+      - .env
     environment:
       NODE_ENV: production
-      # Supabase configuration - these should be set in your server environment
-      SUPABASE_URL: ${SUPABASE_URL}
-      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
-      # Also support the public format for client-side access
-      NEXT_PUBLIC_SUPABASE_URL: ${SUPABASE_URL}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
     ports:
       - "80:3000"
     restart: unless-stopped
