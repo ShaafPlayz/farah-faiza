@@ -57,6 +57,18 @@ FROM base as final
 # Use production node environment by default.
 ENV NODE_ENV production
 
+# Accept Supabase environment variables as build arguments
+ARG SUPABASE_URL
+ARG SUPABASE_ANON_KEY
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Set environment variables from build arguments
+ENV SUPABASE_URL=$SUPABASE_URL
+ENV SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 # Run the application as a non-root user.
 USER node
 
