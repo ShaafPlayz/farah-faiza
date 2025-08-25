@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Header from '../components/Header'
@@ -30,7 +30,7 @@ interface Order {
   status: string
 }
 
-export default function OrderConfirmation() {
+function OrderConfirmationContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const orderId = searchParams.get('id')
@@ -294,5 +294,24 @@ export default function OrderConfirmation() {
 
       <Footer />
     </main>
+  )
+}
+
+export default function OrderConfirmation() {
+  return (
+    <Suspense fallback={
+      <main className={styles.main}>
+        <Header />
+        <div className={styles.loading}>
+          <div className={styles.loadingContent}>
+            <div className={styles.spinner}></div>
+            <p>Loading order details...</p>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    }>
+      <OrderConfirmationContent />
+    </Suspense>
   )
 }

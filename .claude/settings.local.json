@@ -6,7 +6,8 @@
       "Bash(powershell:*)",
       "Bash(rm:*)",
       "Bash(npm run build:*)",
-      "Bash(npx next start:*)"
+      "Bash(npx next start:*)",
+      "Bash(pnpm run:*)"
     ],
     "deny": [],
     "ask": []
