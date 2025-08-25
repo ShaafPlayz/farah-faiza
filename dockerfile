@@ -37,6 +37,18 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Create a stage for building the application.
 FROM deps as build
 
+# Accept Supabase environment variables as build arguments for build stage
+ARG SUPABASE_URL
+ARG SUPABASE_ANON_KEY
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+# Set environment variables for build
+ENV SUPABASE_URL=$SUPABASE_URL
+ENV SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 # Download additional development dependencies before building, as some projects require
 # "devDependencies" to be installed to build. If you don't need this, remove this step.
 RUN --mount=type=bind,source=package.json,target=package.json \
