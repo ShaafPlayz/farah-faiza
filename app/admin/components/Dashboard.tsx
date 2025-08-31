@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { supabase, type Product } from '@/lib/supabase'
 import ProductForm from './ProductForm'
 import ProductList from './ProductList'
@@ -123,31 +124,60 @@ export default function Dashboard({ user }: DashboardProps) {
   }
 
   async function handleDeleteOrder(id: string) {
-    if (confirm('Are you sure you want to delete this order?')) {
-      try {
-        const { error } = await supabase
-          .from('orders')
-          .delete()
-          .eq('id', id)
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', id)
 
-        if (error) {
-          console.error('Error deleting order from database:', error)
-          // Fallback: remove from localStorage
-          const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
-          const updatedOrders = localOrders.filter((order: Order) => order.id !== id)
-          localStorage.setItem('orders', JSON.stringify(updatedOrders))
-          setOrders(updatedOrders)
-        } else {
-          fetchOrders()
-        }
-      } catch (error) {
-        console.error('Error:', error)
+      if (error) {
+        console.error('Error deleting order from database:', error)
         // Fallback: remove from localStorage
         const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
         const updatedOrders = localOrders.filter((order: Order) => order.id !== id)
         localStorage.setItem('orders', JSON.stringify(updatedOrders))
         setOrders(updatedOrders)
+      } else {
+        fetchOrders()
       }
+    } catch (error) {
+      console.error('Error:', error)
+      // Fallback: remove from localStorage
+      const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+      const updatedOrders = localOrders.filter((order: Order) => order.id !== id)
+      localStorage.setItem('orders', JSON.stringify(updatedOrders))
+      setOrders(updatedOrders)
+    }
+  }
+
+  async function handleStatusChange(id: string, newStatus: string) {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: newStatus })
+        .eq('id', id)
+
+      if (error) {
+        console.error('Error updating order status:', error)
+        // Fallback: update localStorage
+        const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+        const updatedOrders = localOrders.map((order: Order) =>
+          order.id === id ? { ...order, status: newStatus } : order
+        )
+        localStorage.setItem('orders', JSON.stringify(updatedOrders))
+        setOrders(updatedOrders)
+      } else {
+        fetchOrders()
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      // Fallback: update localStorage
+      const localOrders = JSON.parse(localStorage.getItem('orders') || '[]')
+      const updatedOrders = localOrders.map((order: Order) =>
+        order.id === id ? { ...order, status: newStatus } : order
+      )
+      localStorage.setItem('orders', JSON.stringify(updatedOrders))
+      setOrders(updatedOrders)
     }
   }
 
@@ -163,6 +193,9 @@ export default function Dashboard({ user }: DashboardProps) {
             </div>
             <div className={styles.userSection}>
               <span>Welcome, {user.email}</span>
+              <Link href="/" className={styles.homeButton}>
+                ← Back to Homepage
+              </Link>
               <button
                 onClick={handleLogout}
                 className={styles.logoutButton}
@@ -228,6 +261,7 @@ export default function Dashboard({ user }: DashboardProps) {
               orders={orders}
               loading={ordersLoading}
               onDelete={handleDeleteOrder}
+              onStatusChange={handleStatusChange}
             />
           )}
           {activeTab === 'add' && (

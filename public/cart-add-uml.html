@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add to Cart UML & Tech Diagram</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body {font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif; margin: 0; padding: 2rem; background:#0f1115; color:#eef2f7; line-height:1.5;} 
+    h1,h2,h3 {font-weight:600; line-height:1.1;}
+    h1 {margin-top:0; font-size:2.2rem;}
+    a {color:#66c2ff}
+    code {background:#1e2530; padding:.15rem .4rem; border-radius:4px; font-size:.9rem;}
+    pre, .mermaid {background:#1b222c; padding:1rem; overflow:auto; border-radius:12px;}
+    .diagram {margin:2rem 0;}
+    .pill {display:inline-block; background:#243140; padding:.35rem .75rem; border-radius:999px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; color:#8ab4e0; margin:.25rem .4rem .25rem 0;}
+    .grid {display:grid; gap:1.5rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin:2rem 0;}
+    .card {background:#141a21; padding:1rem 1.1rem 1.3rem; border:1px solid #212b35; border-radius:10px;}
+    .card h3 {margin:.2rem 0 .6rem; font-size:1rem; letter-spacing:.04em; color:#9bd1ff;}
+    footer {margin-top:4rem; font-size:.75rem; opacity:.6;}
+    ol {padding-left:1.2rem;}
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+  </script>
+</head>
+<body>
+  <h1>Add to Cart: Technology & UML</h1>
+  <p>This page renders Mermaid diagrams describing the add‑to‑cart flow. Open this at <code>/cart-add-uml.html</code> while dev server runs.</p>
+
+  <h2>Key Technologies</h2>
+  <div>
+    <span class="pill">Next.js App Router</span>
+    <span class="pill">React Client Components</span>
+    <span class="pill">Supabase</span>
+    <span class="pill">localStorage</span>
+    <span class="pill">Custom Event cartUpdated</span>
+    <span class="pill">Router Navigation</span>
+    <span class="pill">Hooks (useState/useEffect)</span>
+    <span class="pill">Image Optimization</span>
+  </div>
+
+  <h2>Core Functions</h2>
+  <div class="grid">
+    <div class="card"><h3>addToCart()</h3>Add / merge line item then dispatch <code>cartUpdated</code>.</div>
+  <div class="card"><h3>updateQuantity()</h3>Modify quantity; remove if &lt;= 0; persist &amp; dispatch.</div>
+    <div class="card"><h3>removeItem()</h3>Filter out item; persist & dispatch.</div>
+    <div class="card"><h3>clearCart()</h3>Empty cart key; dispatch.</div>
+    <div class="card"><h3>loadCart()</h3>Hydrate state from <code>localStorage</code>.</div>
+    <div class="card"><h3>updateCartCount()</h3>Aggregate quantities for badge.</div>
+  </div>
+
+  <h2>Sequence: Add Item</h2>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as User
+  participant PD as ProductDetail
+  participant SB as Supabase API
+  participant LS as localStorage
+  participant EV as Event bus (cartUpdated)
+  participant HD as Header Badge
+  participant CT as Cart Page
+
+  U-&gt;&gt;PD: Open product page (/product/:id)
+  PD-&gt;&gt;SB: fetchProduct(id)
+  SB--&gt;&gt;PD: product or fallback
+  U-&gt;&gt;PD: Select size & quantity
+  U-&gt;&gt;PD: Click Add to Cart
+  PD-&gt;&gt;LS: Read existing cart
+  PD-&gt;&gt;LS: Write updated cart
+  PD--&gt;&gt;EV: dispatch cartUpdated
+  Note over PD,LS: Client-only persistence
+  EV--&gt;&gt;HD: updateCartCount()
+  HD-&gt;&gt;LS: Read & sum quantities
+  EV--&gt;&gt;CT: (if open) refresh items
+  U-&gt;&gt;PD: View Cart
+  PD-&gt;&gt;CT: Router push /cart
+  CT-&gt;&gt;LS: loadCart()
+    </div>
+  </div>
+
+  <h2>Component / Data Flow</h2>
+  <div class="diagram">
+    <div class="mermaid">
+graph TD
+  subgraph UI[Client UI Components]
+    PD[ProductDetail]
+    HD[Header]
+    CT[Cart Page]
+  end
+  SB[(Supabase products)]
+  LS[(localStorage cart)]
+  EV[[cartUpdated Event]]
+
+  PD -- fetchProduct() --&gt; SB
+  PD -- addToCart() --&gt; LS
+  PD -- dispatch --&gt; EV
+  CT -- update/remove/clear --&gt; LS
+  CT -- dispatch --&gt; EV
+  HD -- read count --&gt; LS
+  EV -- notifies --&gt; HD
+  EV -- notifies --&gt; CT
+
+  classDef storage fill:#293545,stroke:#3d526b,color:#f2f8ff
+  classDef event fill:#3b2d55,stroke:#6b4fa8,color:#f7f1ff
+  classDef comp fill:#1d2731,stroke:#314657,color:#f5fbff
+
+  class PD,HD,CT comp
+  class LS storage
+  class EV event
+  class SB storage
+    </div>
+  </div>
+
+  <h2>Cart Item Shape</h2>
+  <pre>{
+  id: number,
+  name: string,
+  price: number,
+  image_url: string,
+  size: string,
+  quantity: number
+}</pre>
+
+  <h2>Lifecycle</h2>
+  <ol>
+    <li>Fetch product (Supabase) or fallback sample.</li>
+    <li>User chooses size/quantity, triggers <code>addToCart</code>.</li>
+    <li>Cart persisted in <code>localStorage</code>; event broadcast.</li>
+    <li>Header badge & Cart (if open) re-hydrate.</li>
+    <li>Navigation to /cart reads stored JSON.</li>
+  </ol>
+
+  <h2>Troubleshooting If You Don't See Diagrams</h2>
+  <ul>
+    <li>Ensure internet access (Mermaid loaded from jsdelivr CDN).</li>
+    <li>Open via http://localhost:3000/cart-add-uml.html (serving from public/), not a restricted file URL with CSP limitations.</li>
+    <li>Check devtools console for network or CORS errors.</li>
+    <li>If offline, download Mermaid bundle and replace the CDN import.</li>
+  </ul>
+
+  <footer>Mermaid diagrams render client-side. Edit this file in public/ to update.</footer>
+</body>
+</html>

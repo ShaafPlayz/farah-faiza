@@ -62,7 +62,7 @@ export default function Header() {
           <Link href="/">
             <Image 
               src="/zarablogo.png" 
-              alt="Zarab Collections" 
+              alt="ZC" 
               width={70} 
               height={70} 
             />

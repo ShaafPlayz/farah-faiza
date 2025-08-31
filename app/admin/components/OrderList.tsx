@@ -31,10 +31,14 @@ interface OrderListProps {
   loading: boolean
   orders: Order[]
   onDelete: (id: string) => void
+  onStatusChange: (id: string, newStatus: string) => void
 }
 
-export default function OrderList({ loading, orders, onDelete }: OrderListProps) {
+export default function OrderList({ loading, orders, onDelete, onStatusChange }: OrderListProps) {
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null)
+  const [showDeleteModal, setShowDeleteModal] = useState<string | null>(null)
+  const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -62,6 +66,37 @@ export default function OrderList({ loading, orders, onDelete }: OrderListProps)
     setExpandedOrder(expandedOrder === orderId ? null : orderId)
   }
 
+  const handleStatusChange = (orderId: string, newStatus: string) => {
+    onStatusChange(orderId, newStatus)
+  }
+
+  const handleDeleteClick = (orderId: string) => {
+    setShowDeleteModal(orderId)
+  }
+
+  const confirmDelete = (orderId: string) => {
+    onDelete(orderId)
+    setShowDeleteModal(null)
+  }
+
+  const cancelDelete = () => {
+    setShowDeleteModal(null)
+  }
+
+  // Filter orders based on status and search query
+  const filteredOrders = orders.filter(order => {
+    const matchesStatus = statusFilter === 'all' || order.status === statusFilter
+    const matchesSearch = searchQuery === '' || 
+      order.customer_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.customer_phone.includes(searchQuery)
+    
+    return matchesStatus && matchesSearch
+  })
+
+  // Calculate revenue for filtered orders
+  const filteredRevenue = filteredOrders.reduce((sum, order) => sum + order.total_amount, 0)
+
   if (loading) {
     return (
       <div className={styles.loading}>
@@ -84,8 +119,18 @@ export default function OrderList({ loading, orders, onDelete }: OrderListProps)
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>Recent Orders</h2>
+        <h2>Order Management</h2>
         <div className={styles.stats}>
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>{filteredOrders.length}</span>
+            <span className={styles.statLabel}>Filtered Orders</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statNumber}>
+              Rs. {filteredRevenue.toLocaleString()}
+            </span>
+            <span className={styles.statLabel}>Filtered Revenue</span>
+          </div>
           <div className={styles.stat}>
             <span className={styles.statNumber}>{orders.length}</span>
             <span className={styles.statLabel}>Total Orders</span>
@@ -99,8 +144,36 @@ export default function OrderList({ loading, orders, onDelete }: OrderListProps)
         </div>
       </div>
 
+      {/* Filters and Search */}
+      <div className={styles.controls}>
+        <div className={styles.searchBox}>
+          <input
+            type="text"
+            placeholder="Search by customer name, order ID, or phone..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+        <div className={styles.filterBox}>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className={styles.filterSelect}
+          >
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
       <div className={styles.orderList}>
-        {orders.map((order) => (
+        {filteredOrders.map((order) => (
           <div key={order.id} className={styles.orderCard}>
             <div className={styles.orderHeader} onClick={() => toggleExpanded(order.id)}>
               <div className={styles.orderInfo}>
@@ -163,19 +236,66 @@ export default function OrderList({ loading, orders, onDelete }: OrderListProps)
                 </div>
 
                 <div className={styles.orderActions}>
-                  <button
-                    onClick={() => onDelete(order.id)}
-                    className={styles.deleteButton}
-                    title="Delete Order"
-                  >
-                    Delete Order
-                  </button>
+                  <div className={styles.statusControls}>
+                    <label htmlFor={`status-${order.id}`}>Update Status:</label>
+                    <select
+                      id={`status-${order.id}`}
+                      value={order.status}
+                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                      className={styles.statusSelect}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="processing">Processing</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                  <div className={styles.actionButtons}>
+                    <button
+                      onClick={() => handleDeleteClick(order.id)}
+                      className={styles.deleteButton}
+                      title="Delete Order"
+                    >
+                      Delete Order
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
           </div>
         ))}
       </div>
+
+      {/* Custom Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <div className={styles.modalHeader}>
+              <h3>Confirm Delete</h3>
+            </div>
+            <div className={styles.modalBody}>
+              <p>Are you sure you want to delete this order? This action cannot be undone.</p>
+              <p><strong>Order ID:</strong> #{showDeleteModal.slice(-6)}</p>
+            </div>
+            <div className={styles.modalActions}>
+              <button
+                onClick={() => confirmDelete(showDeleteModal)}
+                className={styles.confirmDeleteButton}
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={cancelDelete}
+                className={styles.cancelButton}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

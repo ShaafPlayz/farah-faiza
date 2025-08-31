@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout & Order Flow UML</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body {font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif; margin:0; padding:2rem; background:#0e1116; color:#eef3f8; line-height:1.5;}
+    h1{margin:0 0 1rem;font-size:2.1rem;} h2{margin:2.2rem 0 0.9rem;font-size:1.35rem;} h3{margin:1.4rem 0 0.4rem;font-size:1.05rem;}
+    a{color:#63b3ff} code{background:#1d2530;padding:.18rem .45rem;border-radius:4px;font-size:.85rem;}
+    .pill{display:inline-block;background:#223243;padding:.35rem .7rem;border-radius:999px;font-size:.65rem;letter-spacing:.06em;color:#8fbde6;text-transform:uppercase;margin:.25rem .45rem .25rem 0;}
+    .grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));}
+    .card{background:#141c24;border:1px solid #1e2a36;padding:1rem 1rem 1.1rem;border-radius:10px;}
+    .card h3{font-size:.95rem;letter-spacing:.05em;color:#9ed4ff;margin:.2rem 0 .55rem;}
+    .diagram{background:#161f29;padding:1rem;border-radius:14px;margin:1.5rem 0;}
+    .mermaid{background:#10161d;border-radius:8px;padding:1rem;}
+    pre{background:#161f29;padding:1rem;border-radius:10px;overflow:auto;font-size:.85rem;}
+    footer{margin-top:4rem;font-size:.7rem;opacity:.6;}
+    ol{padding-left:1.2rem;} li{margin:.35rem 0;}
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad:true, theme:'dark', securityLevel:'loose' });
+  </script>
+</head>
+<body>
+  <h1>Checkout, Order Placement & Admin Flow UML</h1>
+  <p>Diagrams covering customer checkout (<code>/checkout</code>), order placement, order confirmation, and admin dashboard order lifecycle (fetch, status changes, deletion). Payment is currently <strong>Cash on Delivery</strong>; diagram includes future online payment gateway placeholder.</p>
+
+  <h2>Key Technologies</h2>
+  <div>
+    <span class="pill">Next.js App Router</span>
+    <span class="pill">React Client Components</span>
+    <span class="pill">Supabase (orders table)</span>
+    <span class="pill">localStorage Fallback</span>
+    <span class="pill">Cash on Delivery (COD)</span>
+    <span class="pill">Admin Dashboard</span>
+    <span class="pill">Order Status Workflow</span>
+    <span class="pill">Validation Logic</span>
+  </div>
+
+  <h2>Core Functions & Responsibilities</h2>
+  <div class="grid">
+    <div class="card"><h3>loadCart()</h3>Hydrate checkout with existing cart; redirect if empty.</div>
+    <div class="card"><h3>validateForm()</h3>Ensure required name/phone/address fields valid.</div>
+    <div class="card"><h3>placeOrder()</h3>Compose order payload, insert into Supabase or fallback to localStorage; clear cart & redirect.</div>
+    <div class="card"><h3>OrderConfirmation.fetchOrder()</h3>Lookup order by id (DB, then local, then mock).</div>
+    <div class="card"><h3>Dashboard.fetchOrders()</h3>Admin load orders (DB first, fallback local).</div>
+    <div class="card"><h3>Dashboard.handleStatusChange()</h3>Update status in DB or local fallback.</div>
+    <div class="card"><h3>Dashboard.handleDeleteOrder()</h3>Delete order (DB or local).</div>
+    <div class="card"><h3>Future: processOnlinePayment()</h3>External gateway auth & callback (placeholder).</div>
+  </div>
+
+  <h2>Sequence Diagram: Customer Places Order (COD)</h2>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  autonumber
+  actor C as Customer
+  participant CO as Checkout Page
+  participant VAL as Form Validation
+  participant DB as Supabase Orders
+  participant LS as localStorage (Fallback)
+  participant OC as Order Confirmation
+  participant AD as Admin Dashboard
+
+  C-&gt;&gt;CO: Open /checkout
+  CO-&gt;&gt;LS: loadCart()
+  alt Cart empty
+    CO-&gt;&gt;C: Redirect to /cart
+  else Cart has items
+    C-&gt;&gt;CO: Fill form & submit Place Order
+    CO-&gt;&gt;VAL: validateForm()
+    alt Validation fails
+      VAL--&gt;&gt;CO: Errors map
+      CO-&gt;&gt;C: Show inline errors
+    else Valid
+      CO-&gt;&gt;DB: insert(orderData)
+      alt DB success
+        DB--&gt;&gt;CO: order (id)
+        CO-&gt;&gt;LS: remove cart
+        CO-&gt;&gt;OC: Redirect /order-confirmation?id
+      else DB error
+        CO--&gt;&gt;LS: Save order to orders[]
+        CO-&gt;&gt;LS: remove cart
+        CO-&gt;&gt;OC: Redirect /order-confirmation?id
+      end
+    end
+  end
+  OC-&gt;&gt;DB: select(order by id)
+  alt Found in DB
+    DB--&gt;&gt;OC: order
+  else Not in DB
+    OC-&gt;&gt;LS: lookup local order
+    alt Found locally
+      LS--&gt;&gt;OC: order
+    else Missing
+      OC--&gt;&gt;OC: createMockOrder()
+    end
+  end
+  AD-&gt;&gt;DB: fetchOrders()
+  DB--&gt;&gt;AD: order list (or fallback LS)
+    </div>
+  </div>
+
+  <h2>Sequence Diagram: Admin Updates Order Status</h2>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  autonumber
+  actor A as Admin
+  participant AD as Admin Dashboard
+  participant DB as Supabase Orders
+  participant LS as localStorage
+
+  A-&gt;&gt;AD: Opens Orders tab
+  AD-&gt;&gt;DB: fetchOrders()
+  alt DB success
+    DB--&gt;&gt;AD: orders[]
+  else DB failure
+    AD-&gt;&gt;LS: Read local orders
+  end
+  A-&gt;&gt;AD: Change status (e.g., pending→confirmed)
+  AD-&gt;&gt;DB: update(status)
+  alt DB success
+    DB--&gt;&gt;AD: updated row
+  else DB failure
+    AD-&gt;&gt;LS: mutate local copy & persist
+  end
+  A-&gt;&gt;AD: Delete order
+  AD-&gt;&gt;DB: delete(order)
+  alt DB success
+    DB--&gt;&gt;AD: confirm
+  else DB failure
+    AD-&gt;&gt;LS: remove order locally
+  end
+    </div>
+  </div>
+
+  <h2>Component / Data Flow Diagram</h2>
+  <div class="diagram">
+    <div class="mermaid">
+graph TD
+  subgraph Customer Journey
+    CART[Cart (localStorage)]
+    CO[Checkout Page]
+    OC[Order Confirmation]
+  end
+  subgraph Admin Area
+    AD[Admin Dashboard]
+  end
+  DB[(Supabase Orders Table)]
+  LS[(localStorage Orders Fallback)]
+  PG[[Future Payment Gateway]]
+
+  CART -- items --&gt; CO
+  CO -- placeOrder() insert --&gt; DB
+  CO -- fallback save --&gt; LS
+  CO -- clear --&gt; CART
+  CO -- redirect --&gt; OC
+  OC -- fetch --&gt; DB
+  OC -- fallback --&gt; LS
+  AD -- fetch/manage --&gt; DB
+  AD -- fallback --&gt; LS
+  CO -- (future) processOnlinePayment() --&gt; PG
+  PG -- webhook/callback --&gt; CO
+
+  classDef store fill:#293545,stroke:#3d526b,color:#f2f8ff
+  classDef comp fill:#1d2731,stroke:#314657,color:#f5fbff
+  classDef ext fill:#3b2d55,stroke:#6b4fa8,color:#f7f1ff
+
+  class CART,CO,OC,AD comp
+  class DB,LS store
+  class PG ext
+    </div>
+  </div>
+
+  <h2>Order Data Model</h2>
+  <pre>{
+  id: string, // Supabase generated UUID or fallback timestamp
+  customer_name: string,
+  customer_phone: string,
+  customer_address: string,
+  delivery_instructions: string,
+  payment_method: string, // Cash on Delivery (current)
+  total_amount: number,
+  items: CartItem[],
+  order_date: string, // ISO timestamp
+  status: string // pending | confirmed | processing | shipped | delivered | cancelled
+}</pre>
+
+  <h2>Lifecycle Summary</h2>
+  <ol>
+    <li><strong>Pre-Checkout:</strong> Cart built via add-to-cart (see separate diagram).</li>
+    <li><strong>Checkout Load:</strong> Validate cart existence; redirect if empty.</li>
+    <li><strong>User Input & Validation:</strong> Form fields validated client-side.</li>
+    <li><strong>Order Insert:</strong> Attempt DB write; fallback to local for reliability demo.</li>
+    <li><strong>Confirmation:</strong> Retrieval hierarchy DB → local → mock.</li>
+    <li><strong>Admin Management:</strong> Fetch orders with same DB-first pattern; status transitions and deletions mirrored to fallback on failure.</li>
+    <li><strong>Future Gateway:</strong> Add payment intent + asynchronous confirmation before DB insert finalize.</li>
+  </ol>
+
+  <h2>Potential Enhancements</h2>
+  <ul>
+    <li>Replace local fallback with queue + retry worker.</li>
+    <li>Add payment integration (Stripe/PayFast) with webhooks to update status to confirmed.</li>
+    <li>Introduce authentication & role-based access for admin.</li>
+    <li>Server Actions / API Routes for secure order creation instead of direct client insert.</li>
+    <li>Add optimistic UI & toast notifications; remove blocking alerts.</li>
+    <li>Persist order events (status history) in separate table.</li>
+  </ul>
+
+  <footer>Open this via http://localhost:3000/checkout-order-uml.html – Mermaid renders client-side.</footer>
+</body>
+</html>

@@ -11,7 +11,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #ff6b6b;
+  border-top: 4px solid #C5A875;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -62,13 +62,17 @@
 
 .header h2 {
   font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
+  font-weight: 500;
+  color: #111827;
+  font-family: 'Lemon Milk', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .stats {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .stat {
@@ -78,8 +82,8 @@
 .statNumber {
   display: block;
   font-size: 1.5rem;
-  font-weight: bold;
-  color: #ff6b6b;
+  font-weight: 600;
+  color: #C5A875;
 }
 
 .statLabel {
@@ -87,6 +91,70 @@
   color: #666;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+/* Controls Section */
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  border: 2px solid #C5A875;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 250px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #C5A875;
+  border-radius: 0;
+  background: white;
+  color: #111827;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #111827;
+  transform: translateY(-1px);
+}
+
+.searchInput::placeholder {
+  color: #999;
+}
+
+.filterBox {
+  min-width: 200px;
+}
+
+.filterSelect {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #C5A875;
+  border-radius: 0;
+  background: white;
+  color: #111827;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #111827;
+  transform: translateY(-1px);
 }
 
 .orderList {
@@ -171,9 +239,9 @@
 }
 
 .orderTotal {
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1.1rem;
-  color: #ff6b6b;
+  color: #C5A875;
 }
 
 .expandIcon {
@@ -269,15 +337,50 @@
 
 .itemPrice {
   font-weight: 600;
-  color: #ff6b6b;
+  color: #C5A875;
   font-size: 0.9rem;
 }
 
 .orderActions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #C5A875;
+  gap: 1rem;
+}
+
+.statusControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusControls label {
+  font-weight: 500;
+  color: #111827;
+  font-size: 0.875rem;
+}
+
+.statusSelect {
+  padding: 0.5rem;
+  border: 2px solid #C5A875;
+  border-radius: 0;
+  background: white;
+  color: #111827;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.statusSelect:focus {
+  outline: none;
+  border-color: #111827;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .deleteButton {
@@ -285,15 +388,131 @@
   background: #dc3545;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 0;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
 }
 
 .deleteButton:hover {
-  background: #c82333;
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #C5A875, #111827);
+  color: white;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Lemon Milk', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modalBody {
+  padding: 1.5rem;
+  color: #111827;
+}
+
+.modalBody p {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.modalBody p:last-child {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.modalActions {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  background: #f8f9fa;
+}
+
+.confirmDeleteButton {
+  padding: 0.75rem 1.5rem;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.confirmDeleteButton:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.cancelButton {
+  padding: 0.75rem 1.5rem;
+  background: #C5A875;
+  color: #111827;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: #111827;
+  color: white;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
