@@ -53,11 +53,11 @@ export default function OrderList({ loading, orders, onDelete, onStatusChange }:
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'pending': return '#ff6b6b'
+      case 'pending': return '#D4AF37'
       case 'confirmed': return '#4ecdc4'
       case 'shipped': return '#45b7d1'
       case 'delivered': return '#96ceb4'
-      case 'cancelled': return '#fd79a8'
+      case 'cancelled': return '#B8860B'
       default: return '#666'
     }
   }

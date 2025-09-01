@@ -20,7 +20,7 @@
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #ff6b6b;
+  border-top: 4px solid #D4AF37;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -52,7 +52,7 @@
   text-align: center;
   margin-bottom: 3rem;
   padding: 3rem 2rem;
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  background: linear-gradient(135deg, #fcd34d, #d4af37);
   border-radius: 15px;
   color: white;
 }
@@ -61,7 +61,7 @@
   width: 80px;
   height: 80px;
   background: white;
-  color: #ff6b6b;
+  color: #D4AF37;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@
   margin-bottom: 1.5rem;
   color: #333;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #ff6b6b;
+  border-bottom: 2px solid #D4AF37;
 }
 
 .infoGrid {
@@ -135,7 +135,7 @@
 }
 
 .statusPending {
-  color: #ff6b6b;
+  color: #D4AF37;
 }
 
 .subTitle {
@@ -149,7 +149,7 @@
   background: #f8f9fa;
   padding: 1rem;
   border-radius: 8px;
-  border-left: 4px solid #ff6b6b;
+  border-left: 4px solid #D4AF37;
 }
 
 .deliveryInfo p {
@@ -212,7 +212,7 @@
 
 .itemPrice {
   font-weight: 600;
-  color: #ff6b6b;
+  color: #D4AF37;
 }
 
 .totalSection {
@@ -263,7 +263,7 @@
 .stepNumber {
   width: 40px;
   height: 40px;
-  background: #ff6b6b;
+  background: #D4AF37;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -304,22 +304,22 @@
 }
 
 .continueShoppingBtn {
-  background-color: #ff6b6b;
+  background-color: #D4AF37;
   color: white;
 }
 
 .continueShoppingBtn:hover {
-  background-color: #ff5252;
+  background-color: #A16207;
 }
 
 .homeBtn {
   background: white;
-  color: #ff6b6b;
-  border: 2px solid #ff6b6b;
+  color: #D4AF37;
+  border: 2px solid #D4AF37;
 }
 
 .homeBtn:hover {
-  background-color: #ff6b6b;
+  background-color: #D4AF37;
   color: white;
 }
 

@@ -62,7 +62,7 @@ export default function Home() {
           {/* Product Grid */}
           <div className={styles.productGrid}>
             {[
-              { name: "Elegant Pink Dress", color: "from-pink-200 to-pink-300" },
+              { name: "Elegant Gold Dress", color: "from-yellow-300 to-amber-400" },
               { name: "Classic Red Ensemble", color: "from-red-200 to-red-300" },
               { name: "Sophisticated Black", color: "from-gray-800 to-black" }
             ].map((item, index) => (
