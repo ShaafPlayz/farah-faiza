@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import Image from 'next/image'
 import styles from './Login.module.css'
 
 export default function Login() {
@@ -37,14 +38,16 @@ export default function Login() {
       <div className={styles.formContainer}>
         <div className={styles.titleSection}>
           <Link href="/">
-            <h1>Zarab Collections</h1>
+            <Image 
+              src="/zarablogo.png" 
+              alt="ZC" 
+              width={100} 
+              height={100} 
+            />
           </Link>
           <h2 className={styles.subtitle}>
-            Seller Login
+            Admin Login
           </h2>
-          <p className={styles.description}>
-            Access your admin dashboard
-          </p>
         </div>
         <form className={styles.form} onSubmit={handleLogin}>
           {error && (

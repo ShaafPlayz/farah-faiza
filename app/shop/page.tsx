@@ -15,6 +15,7 @@ export default function Shop() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
   const [sortBy, setSortBy] = useState('newest')
+  const [selectedSize, setSelectedSize] = useState('all')
   const [filtersOpen, setFiltersOpen] = useState(false)
   const categories = useMemo(() => [
     { key: 'all', label: 'All' },
@@ -22,6 +23,10 @@ export default function Shop() {
     { key: 'tops', label: 'Tops' },
     { key: 'bottoms', label: 'Bottoms' }
   ], [])
+  // const prodSizes = useMemo(() => [
+  //   { key: 'all', label: 'All' },
+  //   { key: 'XS', label: ''}
+  // ])
 
   useEffect(() => {
     fetchProducts()
@@ -37,9 +42,10 @@ export default function Shop() {
       if (error) {
         console.error('Error fetching products:', error)
         // Fallback to sample data if database is not ready
-        setProducts(getSampleProducts())
+        setProducts([])
       } else {
         setProducts(data || [])
+        // setProducts(getSampleProducts()) // Sample Testing Data
       }
     } catch (error) {
       console.error('Error:', error)
@@ -73,7 +79,7 @@ export default function Shop() {
         image_data: "",
         category: "Tops",
         collection: "Professional",
-        sizes: ["XS", "S", "M", "L", "XL"],
+        sizes: ["XS", "S", "M", "L"],
         created_at: "2023-01-02T00:00:00Z",
         updated_at: "2023-01-02T00:00:00Z"
       },
@@ -86,7 +92,7 @@ export default function Shop() {
         image_data: "",
         category: "Bottoms",
         collection: "Professional",
-        sizes: ["XS", "S", "M", "L", "XL"],
+        sizes: ["XS", "S", "XL"],
         created_at: "2023-01-03T00:00:00Z",
         updated_at: "2023-01-03T00:00:00Z"
       },
@@ -99,7 +105,7 @@ export default function Shop() {
         image_data: "",
         category: "Tops",
         collection: "Traditional",
-        sizes: ["XS", "S", "M", "L", "XL"],
+        sizes: ["XS"],
         created_at: "2023-01-04T00:00:00Z",
         updated_at: "2023-01-04T00:00:00Z"
       }
@@ -107,8 +113,11 @@ export default function Shop() {
   }
 
   const filteredProducts = products.filter(product => {
-    if (filter === 'all') return true
-    return product.category.toLowerCase() === filter.toLowerCase()
+    const matchedCategory = filter === 'all' || product.category.toLowerCase() === filter.toLowerCase()
+
+    const matchedSizes = selectedSize === 'all' || product.sizes.includes(selectedSize)
+
+    return matchedSizes && matchedCategory
   })
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -131,7 +140,6 @@ export default function Shop() {
         <div className={styles.loading}>
           <div className={styles.loadingContent}>
             <div className={styles.spinner}></div>
-            <p>Loading products...</p>
           </div>
         </div>
         <Footer />
@@ -157,6 +165,15 @@ export default function Shop() {
               >{cat.label}</button>
             ))}
           </div>
+          <div className={styles.chipRow} aria-label="Quick Size filters" style={{ marginTop: '1rem' }}>
+            {['XS','S','M','L','XL', 'all'].map(size => (
+                <button 
+                key={size} 
+                onClick={() => setSelectedSize(size)}
+                className={`${styles.chip} ${selectedSize === size ? styles.chipActive : ''}`} 
+                aria-label={`Filter size ${size}`}>{size}</button>
+              ))}
+          </div>
         </div>
         <div className={styles.heroBackdrop} aria-hidden="true" />
       </section>
@@ -164,7 +181,7 @@ export default function Shop() {
       {/* Main content */}
       <div className={styles.shell}>
         {/* Mobile filter toggle */}
-        <div className={styles.mobileFilterToggle}>
+        {/* <div className={styles.mobileFilterToggle}>
           <button 
             onClick={() => setFiltersOpen(!filtersOpen)}
             className={styles.filterToggleBtn}
@@ -180,10 +197,10 @@ export default function Shop() {
               <path d="M9 17H15L13 19H11L9 17Z" fill="currentColor"/>
             </svg>
           </button>
-        </div>
+        </div> */}
 
-        <aside className={`${styles.sidebar} ${filtersOpen ? styles.sidebarOpen : ''}`} aria-label="Filters">
-          <div className={styles.panel}>
+        <aside className={`${styles.sidebar} ${filtersOpen ? styles.sidebarOpen : ''}`} aria-label="Filters" >
+          {/* <div className={styles.panel}>
             <h3 className={styles.panelTitle}>Categories</h3>
             <ul className={styles.verticalList}>
               {categories.map(cat => (
@@ -199,11 +216,11 @@ export default function Shop() {
           <div className={styles.panel}>
             <h3 className={styles.panelTitle}>Size</h3>
             <div className={styles.sizeGrid}>
-              {['XS','S','M','L','XL'].map(size => (
-                <button key={size} className={styles.sizeBtn} aria-label={`Filter size ${size}`}>{size}</button>
+              {['XS','S','M','L','XL', 'all'].map(size => (
+                <button key={size} className={styles.sizeBtn} onClick={() => setSelectedSize(size)} aria-label={`Filter size ${size}`}>{size}</button>
               ))}
             </div>
-          </div>
+          </div> */}
         </aside>
 
         <section className={styles.productsArea}>

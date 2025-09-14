@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shop Filters UML & Architecture</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body {font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif; margin: 0; padding: 2rem; background:#0f1115; color:#eef2f7; line-height:1.5;} 
+    h1,h2,h3 {font-weight:600; line-height:1.1;}
+    h1 {margin-top:0; font-size:2.2rem;}
+    a {color:#66c2ff}
+    code {background:#1e2530; padding:.15rem .4rem; border-radius:4px; font-size:.9rem;}
+    pre, .mermaid {background:#1b222c; padding:1rem; overflow:auto; border-radius:12px;}
+    .diagram {margin:2rem 0;}
+    .pill {display:inline-block; background:#243140; padding:.35rem .75rem; border-radius:999px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; color:#8ab4e0; margin:.25rem .4rem .25rem 0;}
+    .grid {display:grid; gap:1.5rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin:2rem 0;}
+    .card {background:#141a21; padding:1rem 1.1rem 1.3rem; border:1px solid #212b35; border-radius:10px;}
+    .card h3 {margin:.2rem 0 .6rem; font-size:1rem; letter-spacing:.04em; color:#9bd1ff;}
+    footer {margin-top:4rem; font-size:.75rem; opacity:.6;}
+    ol {padding-left:1.2rem;}
+    .code-block {background:#1e2530; padding:1rem; border-radius:8px; font-family:monospace; font-size:0.85rem; overflow-x:auto;}
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+  </script>
+</head>
+<body>
+  <h1>Shop Page Filters: UML & Architecture</h1>
+  <p>Complete breakdown of filtering and sorting mechanisms in the shop page including state management, UI components, and data processing.</p>
+
+  <h2>Key Technologies</h2>
+  <div>
+    <span class="pill">React State Management</span>
+    <span class="pill">useMemo Hook</span>
+    <span class="pill">Array.filter()</span>
+    <span class="pill">Array.sort()</span>
+    <span class="pill">Responsive Design</span>
+    <span class="pill">Mobile-First UI</span>
+    <span class="pill">CSS Modules</span>
+    <span class="pill">Event Handlers</span>
+  </div>
+
+  <h2>Filter Components & Functions</h2>
+  <div class="grid">
+    <div class="card"><h3>Category Filter</h3>Hero chips and sidebar buttons for filtering by product category (All, Dresses, Tops, Bottoms).</div>
+    <div class="card"><h3>Sort Functionality</h3>Dropdown to sort by newest, price (low/high), and popularity with custom comparison logic.</div>
+    <div class="card"><h3>Mobile Filter Toggle</h3>Collapsible sidebar with backdrop overlay for mobile responsive filtering experience.</div>
+    <div class="card"><h3>Size Filter (UI Only)</h3>Visual size selection grid (XS, S, M, L, XL) - currently display-only component.</div>
+    <div class="card"><h3>Product Count Display</h3>Dynamic counter showing filtered results with proper pluralization.</div>
+    <div class="card"><h3>No Results State</h3>Empty state display when filters yield no matching products.</div>
+  </div>
+
+  <h2>Filter State Management</h2>
+  <div class="diagram">
+    <div class="mermaid">
+stateDiagram-v2
+    [*] --> InitialState
+    InitialState --> FilterLoaded : Page loads
+    
+    state FilterLoaded {
+        [*] --> AllProducts
+        AllProducts --> CategoryFiltered : setFilter(category)
+        CategoryFiltered --> AllProducts : setFilter('all')
+        CategoryFiltered --> CategoryFiltered : setFilter(different_category)
+        
+        [*] --> DefaultSort
+        DefaultSort --> PriceLowHigh : setSortBy('price-low')
+        DefaultSort --> PriceHighLow : setSortBy('price-high')
+        DefaultSort --> PopularSort : setSortBy('popular')
+        DefaultSort --> NewestSort : setSortBy('newest')
+        
+        PriceLowHigh --> PriceHighLow
+        PriceHighLow --> PopularSort
+        PopularSort --> NewestSort
+        NewestSort --> PriceLowHigh
+    }
+    
+    state FilterLoaded {
+        [*] --> MobileCollapsed
+        MobileCollapsed --> MobileExpanded : setFiltersOpen(true)
+        MobileExpanded --> MobileCollapsed : setFiltersOpen(false)
+    }
+    </div>
+  </div>
+
+  <h2>Filter Processing Flow</h2>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant HP as Hero Pills
+    participant SB as Sidebar
+    participant MT as Mobile Toggle
+    participant SF as State Filter
+    participant SS as State Sort
+    participant FP as Filter Processor
+    participant SP as Sort Processor
+    participant PC as Product Counter
+    participant PG as Product Grid
+
+    U-&gt;&gt;HP: Click category chip
+    HP-&gt;&gt;SF: setFilter(category)
+    SF-&gt;&gt;FP: filteredProducts calculation
+    FP-&gt;&gt;SP: Apply current sort to filtered results
+    SP-&gt;&gt;PC: Update product count
+    SP-&gt;&gt;PG: Re-render product grid
+
+    U-&gt;&gt;SB: Click sort dropdown
+    SB-&gt;&gt;SS: setSortBy(option)
+    SS-&gt;&gt;SP: sortedProducts calculation
+    SP-&gt;&gt;PC: Update product count
+    SP-&gt;&gt;PG: Re-render product grid
+
+    U-&gt;&gt;MT: Toggle mobile filters
+    MT-&gt;&gt;MT: setFiltersOpen(!filtersOpen)
+    MT-&gt;&gt;SB: Show/hide sidebar
+
+    Note over FP,SP: Processing happens on every state change
+    Note over PC,PG: UI updates automatically via React
+    </div>
+  </div>
+
+  <h2>Category Filter Logic</h2>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+    START[Products Array] 
+    FILTER{Filter Type?}
+    ALL[Return All Products]
+    CATEGORY[Filter by Category]
+    CHECK[product.category.toLowerCase() === filter.toLowerCase()]
+    MATCH[Include Product]
+    EXCLUDE[Exclude Product]
+    RESULT[Filtered Products Array]
+
+    START --&gt; FILTER
+    FILTER --&gt;|"filter === 'all'"| ALL
+    FILTER --&gt;|"specific category"| CATEGORY
+    
+    ALL --&gt; RESULT
+    CATEGORY --&gt; CHECK
+    CHECK --&gt;|"true"| MATCH
+    CHECK --&gt;|"false"| EXCLUDE
+    MATCH --&gt; RESULT
+    EXCLUDE --&gt; RESULT
+
+    classDef process fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+    classDef decision fill:#5a4a2d,stroke:#8b7a4a,color:#f8f5f0
+    classDef result fill:#2d5530,stroke:#4a8b57,color:#f0f8f0
+
+    class START,CATEGORY,CHECK,MATCH,EXCLUDE process
+    class FILTER decision
+    class ALL,RESULT result
+    </div>
+  </div>
+
+  <h2>Sort Algorithm Logic</h2>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+    FILTERED[Filtered Products]
+    SORT{Sort Type?}
+    PRICE_LOW[Price: Low to High]
+    PRICE_HIGH[Price: High to Low]
+    POPULAR[Popularity]
+    NEWEST[Newest First]
+    
+    CALC_LOW[a.price - b.price]
+    CALC_HIGH[b.price - a.price]
+    CALC_POP[b.id - a.id]
+    CALC_NEW[new Date(b.created_at) - new Date(a.created_at)]
+    
+    SORTED[Sorted Products Array]
+
+    FILTERED --&gt; SORT
+    SORT --&gt;|"price-low"| PRICE_LOW
+    SORT --&gt;|"price-high"| PRICE_HIGH  
+    SORT --&gt;|"popular"| POPULAR
+    SORT --&gt;|"newest"| NEWEST
+
+    PRICE_LOW --&gt; CALC_LOW
+    PRICE_HIGH --&gt; CALC_HIGH
+    POPULAR --&gt; CALC_POP
+    NEWEST --&gt; CALC_NEW
+
+    CALC_LOW --&gt; SORTED
+    CALC_HIGH --&gt; SORTED
+    CALC_POP --&gt; SORTED
+    CALC_NEW --&gt; SORTED
+
+    classDef input fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+    classDef decision fill:#5a4a2d,stroke:#8b7a4a,color:#f8f5f0
+    classDef operation fill:#3d2d55,stroke:#6b4fa8,color:#f7f1ff
+    classDef output fill:#2d5530,stroke:#4a8b57,color:#f0f8f0
+
+    class FILTERED input
+    class SORT decision
+    class PRICE_LOW,PRICE_HIGH,POPULAR,NEWEST,CALC_LOW,CALC_HIGH,CALC_POP,CALC_NEW operation
+    class SORTED output
+    </div>
+  </div>
+
+  <h2>Responsive Filter UI Architecture</h2>
+  <div class="diagram">
+    <div class="mermaid">
+graph TD
+    subgraph Desktop["Desktop View (≥1024px)"]
+        DH[Hero Category Chips]
+        DS[Sticky Sidebar]
+        DP[Product Grid]
+    end
+    
+    subgraph Mobile["Mobile View (<1024px)"]
+        MH[Hero Category Chips]
+        MT[Mobile Filter Toggle]
+        MO[Overlay Sidebar]
+        MP[Product Grid]
+    end
+    
+    subgraph Shared["Shared Components"]
+        ST[Sort Dropdown]
+        CNT[Product Counter]
+        NST[No Results State]
+    end
+
+    DH --&gt; DS
+    DS --&gt; DP
+    DS --&gt; ST
+    ST --&gt; CNT
+    DP --&gt; NST
+
+    MH --&gt; MT
+    MT --&gt; MO
+    MO --&gt; MP
+    MO --&gt; ST
+    ST --&gt; CNT
+    MP --&gt; NST
+
+    classDef desktop fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+    classDef mobile fill:#3d2d55,stroke:#6b4fa8,color:#f7f1ff
+    classDef shared fill:#2d5530,stroke:#4a8b57,color:#f0f8f0
+
+    class DH,DS,DP desktop
+    class MH,MT,MO,MP mobile
+    class ST,CNT,NST shared
+    </div>
+  </div>
+
+  <h2>Filter State Variables</h2>
+  <div class="code-block">
+// State Management
+const [filter, setFilter] = useState('all')           // Category filter
+const [sortBy, setSortBy] = useState('newest')        // Sort option
+const [filtersOpen, setFiltersOpen] = useState(false) // Mobile sidebar
+
+// Memoized Categories
+const categories = useMemo(() => [
+  { key: 'all', label: 'All' },
+  { key: 'dresses', label: 'Dresses' },
+  { key: 'tops', label: 'Tops' },
+  { key: 'bottoms', label: 'Bottoms' }
+], [])
+  </div>
+
+  <h2>Core Filter Functions</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>filteredProducts</h3>
+      <p><strong>Logic:</strong> <code>products.filter(product => filter === 'all' || product.category.toLowerCase() === filter.toLowerCase())</code></p>
+      <p><strong>Purpose:</strong> Apply category filtering to product array</p>
+      <p><strong>Case Insensitive:</strong> Uses toLowerCase() for comparison</p>
+    </div>
+    <div class="card">
+      <h3>sortedProducts</h3>
+      <p><strong>Logic:</strong> <code>[...filteredProducts].sort((a, b) => comparison)</code></p>
+      <p><strong>Purpose:</strong> Apply sorting to filtered results</p>
+      <p><strong>Immutable:</strong> Creates new array to avoid mutation</p>
+    </div>
+    <div class="card">
+      <h3>setFilter(category)</h3>
+      <p><strong>Trigger:</strong> Hero chips and sidebar buttons</p>
+      <p><strong>Effect:</strong> Updates filter state, recalculates filtered products</p>
+      <p><strong>Cascade:</strong> Automatically triggers sort recalculation</p>
+    </div>
+    <div class="card">
+      <h3>setSortBy(option)</h3>
+      <p><strong>Trigger:</strong> Sort dropdown selection</p>
+      <p><strong>Options:</strong> newest, price-low, price-high, popular</p>
+      <p><strong>Effect:</strong> Re-sorts current filtered products</p>
+    </div>
+    <div class="card">
+      <h3>setFiltersOpen(boolean)</h3>
+      <p><strong>Trigger:</strong> Mobile filter toggle button</p>
+      <p><strong>Effect:</strong> Shows/hides overlay sidebar on mobile</p>
+      <p><strong>Responsive:</strong> Only active on screen width < 1024px</p>
+    </div>
+    <div class="card">
+      <h3>Product Count Logic</h3>
+      <p><strong>Display:</strong> <code>Showing {sortedProducts.length} product{sortedProducts.length !== 1 && 's'}</code></p>
+      <p><strong>Grammar:</strong> Proper pluralization handling</p>
+      <p><strong>Dynamic:</strong> Updates with every filter/sort change</p>
+    </div>
+  </div>
+
+  <h2>Sort Comparison Functions</h2>
+  <div class="code-block">
+const sortedProducts = [...filteredProducts].sort((a, b) => {
+  switch (sortBy) {
+    case 'price-low':
+      return a.price - b.price
+    case 'price-high':
+      return b.price - a.price
+    case 'popular':
+      return b.id - a.id  // Higher ID = more popular
+    default: // 'newest'
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  }
+})
+  </div>
+
+  <h2>UI Component Interaction Flow</h2>
+  <div class="diagram">
+    <div class="mermaid">
+graph LR
+    subgraph Input["User Input"]
+        HC[Hero Chips]
+        SBC[Sidebar Category Buttons]
+        SDD[Sort Dropdown]
+        MFT[Mobile Filter Toggle]
+        SZ[Size Buttons]*
+    end
+    
+    subgraph State["React State"]
+        FS[filter state]
+        SS[sortBy state]
+        MS[filtersOpen state]
+    end
+    
+    subgraph Processing["Data Processing"]
+        FP[filteredProducts]
+        SP[sortedProducts]
+    end
+    
+    subgraph Output["UI Output"]
+        PG[Product Grid]
+        PC[Product Count]
+        NR[No Results]
+        MSB[Mobile Sidebar]
+    end
+
+    HC --&gt; FS
+    SBC --&gt; FS
+    SDD --&gt; SS
+    MFT --&gt; MS
+    
+    FS --&gt; FP
+    FP --&gt; SP
+    SS --&gt; SP
+    
+    SP --&gt; PG
+    SP --&gt; PC
+    SP --&gt; NR
+    MS --&gt; MSB
+
+    classDef input fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+    classDef state fill:#5a4a2d,stroke:#8b7a4a,color:#f8f5f0
+    classDef process fill:#3d2d55,stroke:#6b4fa8,color:#f7f1ff
+    classDef output fill:#2d5530,stroke:#4a8b57,color:#f0f8f0
+
+    class HC,SBC,SDD,MFT,SZ input
+    class FS,SS,MS state
+    class FP,SP process
+    class PG,PC,NR,MSB output
+    </div>
+  </div>
+
+  <h2>Filter Performance Considerations</h2>
+  <ol>
+    <li><strong>useMemo for categories:</strong> Prevents unnecessary re-renders of category options</li>
+    <li><strong>Immutable sorting:</strong> Uses spread operator to avoid mutating original array</li>
+    <li><strong>Case-insensitive comparison:</strong> toLowerCase() ensures reliable category matching</li>
+    <li><strong>Efficient re-renders:</strong> React state changes trigger only necessary component updates</li>
+    <li><strong>No network requests:</strong> All filtering/sorting happens client-side for instant response</li>
+  </ol>
+
+  <h2>Error & Edge Cases</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Empty Product Array</h3>
+      <p>Filters gracefully handle empty arrays, showing "No products found" message</p>
+    </div>
+    <div class="card">
+      <h3>No Filter Matches</h3>
+      <p>When category filter yields no results, displays empty state with clear messaging</p>
+    </div>
+    <div class="card">
+      <h3>Invalid Sort Option</h3>
+      <p>Default case in switch statement falls back to 'newest' sort</p>
+    </div>
+    <div class="card">
+      <h3>Missing Product Fields</h3>
+      <p>Date parsing and price comparison handle undefined/null values gracefully</p>
+    </div>
+  </div>
+
+  <h2>Mobile Responsiveness</h2>
+  <div class="diagram">
+    <div class="mermaid">
+stateDiagram-v2
+    [*] --> ScreenSize
+    
+    state ScreenSize {
+        [*] --> Desktop
+        [*] --> Mobile
+        
+        state Desktop {
+            [*] --> StickyVisible
+            StickyVisible --> StickyVisible : Always show sidebar
+        }
+        
+        state Mobile {
+            [*] --> Collapsed
+            Collapsed --> Expanded : User taps filter toggle
+            Expanded --> Collapsed : User taps backdrop/toggle
+            
+            state Expanded {
+                [*] --> OverlayMode
+                OverlayMode --> FullScreen : Fixed position overlay
+            }
+        }
+    }
+    
+    Desktop --> Mobile : Screen resize < 1024px
+    Mobile --> Desktop : Screen resize >= 1024px
+    </div>
+  </div>
+
+  <footer>Complete filtering architecture for shop page. Features category filtering, sorting, responsive design, and mobile overlay. Open at http://localhost:3000/shop-filters-uml.html</footer>
+</body>
+</html>

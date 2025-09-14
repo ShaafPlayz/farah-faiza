@@ -91,13 +91,15 @@ export default function Cart() {
     <main className={styles.main}>
       <Header />
       
+      
       <div className={styles.container}>
-        <div className={styles.header}>
+        
+        {/* <div className={styles.header}>
           <h1 className={styles.title}>Shopping Cart</h1>
           <button onClick={() => router.push('/shop')} className={styles.continueShoppingBtn}>
             ← Continue Shopping
           </button>
-        </div>
+        </div> */}
 
         {cartItems.length === 0 ? (
           <div className={styles.emptyCart}>
@@ -211,7 +213,7 @@ export default function Cart() {
               </button>
 
               <div className={styles.deliveryInfo}>
-                <p>📦 Free delivery on orders over Rs. 3,000</p>
+                {/* <p>📦 Free delivery on orders over Rs. 3,000</p> */}
                 <p>🚚 Delivery within 3-5 business days</p>
                 <p>💰 Cash on Delivery available</p>
               </div>

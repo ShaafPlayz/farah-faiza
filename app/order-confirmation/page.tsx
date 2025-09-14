@@ -141,7 +141,7 @@ function OrderConfirmationContent() {
         <div className={styles.loading}>
           <div className={styles.loadingContent}>
             <div className={styles.spinner}></div>
-            <p>Loading order details...</p>
+            {/* <p>Loading order details...</p> */}
           </div>
         </div>
         <Footer />
@@ -172,11 +172,17 @@ function OrderConfirmationContent() {
       <div className={styles.container}>
         <div className={styles.successHeader}>
           <div className={styles.successIcon}>✓</div>
-          <h1 className={styles.successTitle}>Order Confirmed!</h1>
+          <h1 className={styles.successTitle}>Order Placed!</h1>
           <p className={styles.successMessage}>
-            Thank you for your order. We&apos;ve received your order and will start processing it soon.
+            Thank you for your order. We&apos;ve received your order and will start processing it soon. Come back to this page to view updates.
           </p>
+          
         </div>
+        <div className={styles.successHeader2}>
+          <h3  style={{paddingBottom: '0.5rem', fontWeight: '300'}}> Your Order ID is</h3>
+          <h1  style={{paddingBottom: '0.5rem', fontWeight: '900'}}>{order.id}</h1>
+        </div>
+        
 
         <div className={styles.orderDetails}>
           <div className={styles.orderInfo}>
@@ -280,6 +286,30 @@ function OrderConfirmationContent() {
               </div>
             </div>
           </div>
+
+          
+        </div>
+
+        <div className={styles.nextSteps}>
+          <h2 className={styles.sectionTitle}>Need Help?</h2>
+          <div className={styles.stepsList}>
+            <div className={styles.step}>
+              
+              <div className={styles.stepContent}>
+                <h4>Connect using Instagram and/or Tiktok</h4>
+                <p>@zarabcollections</p>
+              </div>
+            </div>
+            
+            <div className={styles.step}>
+              
+              <div className={styles.stepContent}>
+                <h4>More contact options coming soon!</h4>
+              </div>
+            </div>
+          </div>
+
+          
         </div>
 
         <div className={styles.actions}>

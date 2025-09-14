@@ -96,9 +96,10 @@ export default function Header() {
             <Link href="/admin" aria-label="Account">
               <i className={`fas fa-user ${styles.navIcon}`}></i>
             </Link>
-            <Link href="#" aria-label="Search">
+            {/* Search Icon */}
+            {/* <Link href="#" aria-label="Search">
               <i className={`fas fa-search ${styles.navIcon}`}></i>
-            </Link>
+            </Link> */}
             <Link href="/cart" aria-label="Shopping Bag" className={styles.cartLink}>
               <i className={`fas fa-shopping-bag ${styles.navIcon}`}></i>
               {cartItemCount > 0 && (
@@ -150,7 +151,11 @@ export default function Header() {
                   <i className="fas fa-user" style={{marginRight: '12px'}}></i>ACCOUNT
                 </Link>
               </li>
-              <li>
+              {/* Search Icon: Disabled
+                  Reason: Not yet implemented
+                  StarDate: 8th September  */}
+                  
+              {/* <li>
                 <Link 
                   href="#" 
                   className={styles.mobileNavLink}
@@ -158,7 +163,8 @@ export default function Header() {
                 >
                   <i className="fas fa-search" style={{marginRight: '12px'}}></i>SEARCH
                 </Link>
-              </li>
+              </li> */}
+
               <li>
                 <Link 
                   href="/cart" 

@@ -159,7 +159,7 @@ export default function ProductDetail() {
         <div className={styles.loading}>
           <div className={styles.loadingContent}>
             <div className={styles.spinner}></div>
-            <p>Loading product...</p>
+
           </div>
         </div>
         <Footer />
@@ -193,11 +193,13 @@ export default function ProductDetail() {
       <Header />
       
       <div className={styles.container}>
-        <div className={styles.breadcrumb}>
+
+        
+        {/* <div className={styles.breadcrumb}>
           <button onClick={() => router.back()} className={styles.breadcrumbLink}>
             ← Back to Shop
           </button>
-        </div>
+        </div> */}
 
         <div className={styles.productDetail}>
           <div className={styles.imageSection}>
@@ -209,7 +211,9 @@ export default function ProductDetail() {
                 className={styles.image}
               />
             </div>
-            <div className={styles.thumbnails}>
+
+            {/* Thumbnails */}
+            {/* <div className={styles.thumbnails}>
               {images.map((image, index) => (
                 <button
                   key={index}
@@ -223,13 +227,15 @@ export default function ProductDetail() {
                   />
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div className={styles.productInfo}>
             <div className={styles.productHeader}>
+              
               <h1 className={styles.productTitle}>{product.name}</h1>
               <p className={styles.productPrice}>Rs. {product.price.toLocaleString()}</p>
+              
             </div>
 
             <div className={styles.productMeta}>
@@ -278,6 +284,10 @@ export default function ProductDetail() {
               </div>
             </div>
 
+            <div className={styles.stockInfo}>
+              <p className={styles.stockStatus}>✓ In Stock</p>
+            </div>
+
             <div className={styles.actions}>
               <button
                 onClick={addToCart}
@@ -294,10 +304,7 @@ export default function ProductDetail() {
               </button>
             </div>
 
-            <div className={styles.stockInfo}>
-              <p className={styles.stockStatus}>✓ In Stock</p>
-              <p className={styles.deliveryInfo}>Free delivery on orders over Rs. 3,000</p>
-            </div>
+            
           </div>
         </div>
       </div>

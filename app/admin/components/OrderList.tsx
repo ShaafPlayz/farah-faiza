@@ -253,13 +253,13 @@ export default function OrderList({ loading, orders, onDelete, onStatusChange }:
                     </select>
                   </div>
                   <div className={styles.actionButtons}>
-                    <button
+                    {/* <button
                       onClick={() => handleDeleteClick(order.id)}
                       className={styles.deleteButton}
                       title="Delete Order"
                     >
                       Delete Order
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>

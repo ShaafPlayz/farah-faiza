@@ -20,11 +20,11 @@ export default function ProductCard({ product }: ProductCardProps) {
             alt={product.name}
             fill
           />
-          <div className={`product-overlay ${styles.productOverlay}`}>
-            <span className={styles.quickView} aria-label="View details">
-              <i className="fas fa-eye"></i>
-            </span>
-          </div>
+          {/* <div className={`product-overlay ${styles.productOverlay}`}> */}
+            {/* <span className={styles.quickView} aria-label="View details"> */}
+              {/* <i className="fas fa-eye"></i> */}
+            {/* </span> */}
+          {/* </div> */}
         </div>
         <div className={`product-info ${styles.productInfo}`}>
           <h3>{product.name}</h3>

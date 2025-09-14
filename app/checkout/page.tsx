@@ -18,6 +18,7 @@ interface CartItem {
 }
 
 interface OrderData {
+  id: string
   customer_name: string
   customer_phone: string
   customer_address: string
@@ -108,6 +109,11 @@ export default function Checkout() {
     }
   }
 
+  const generateOrderId = () => {
+    // Generate a random 8-digit number between 10000000 and 99999999
+    return Math.floor(10000000 + Math.random() * 90000000).toString()
+  }
+
   const placeOrder = async () => {
     if (!validateForm()) {
       return
@@ -115,7 +121,11 @@ export default function Checkout() {
 
     setPlacing(true)
 
+    // Generate 8-digit order ID
+    const orderId = generateOrderId()
+
     const orderData: OrderData = {
+      id: orderId,
       customer_name: formData.name,
       customer_phone: formData.phone,
       customer_address: formData.address,
@@ -138,11 +148,8 @@ export default function Checkout() {
       if (error) {
         console.error('Database error:', error)
         // Fallback: save to localStorage for demo
-        const orderId = Date.now().toString()
-        const orderWithId = { ...orderData, id: orderId }
-        
         const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
-        existingOrders.push(orderWithId)
+        existingOrders.push(orderData)
         localStorage.setItem('orders', JSON.stringify(existingOrders))
         
         // Clear cart and redirect
@@ -156,11 +163,8 @@ export default function Checkout() {
     } catch (error) {
       console.error('Error placing order:', error)
       // Fallback: save to localStorage
-      const orderId = Date.now().toString()
-      const orderWithId = { ...orderData, id: orderId }
-      
       const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
-      existingOrders.push(orderWithId)
+      existingOrders.push(orderData)
       localStorage.setItem('orders', JSON.stringify(existingOrders))
       
       // Clear cart and redirect
@@ -190,12 +194,13 @@ export default function Checkout() {
     <main className={styles.main}>
       <Header />
       
+      
       <div className={styles.container}>
         <div className={styles.header}>
           <h1 className={styles.title}>Checkout</h1>
-          <button onClick={() => router.push('/cart')} className={styles.backBtn}>
+          {/* <button onClick={() => router.push('/cart')} className={styles.backBtn}>
             ← Back to Cart
-          </button>
+          </button> */}
         </div>
 
         <div className={styles.checkoutContent}>
@@ -336,10 +341,10 @@ export default function Checkout() {
             </button>
 
             <div className={styles.orderInfo}>
-              <p>📦 Free delivery on orders over Rs. 3,000</p>
+              {/* <p>📦 Free delivery on orders over Rs. 3,000</p> */}
               <p>🚚 Delivery within 3-5 business days</p>
               <p>💰 Cash on Delivery</p>
-              <p>🔄 Easy returns within 7 days</p>
+              {/* <p>🔄 Easy returns within 7 days</p> */}
             </div>
           </div>
         </div>

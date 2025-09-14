@@ -1,7 +1,6 @@
 .footer {
-  background: darkgoldenrod;
-  color: white;
-  padding: 32px 0;
+  background: rgb(255, 255, 255);
+  color: #c5a875;
   text-align: center;
 }
 
@@ -10,14 +9,16 @@
 }
 
 .container {
+  align-content: center;
   max-width: 1200px;
+  min-height: 10rem;
   margin: 0 auto;
   padding: 0 24px;
 }
 
 .copyright {
   font-size: 1rem;
-  color: #ffffff71;
+  color: #c5a875;
   font-weight: 300;
   font-family: "Lemon Milk";
 }

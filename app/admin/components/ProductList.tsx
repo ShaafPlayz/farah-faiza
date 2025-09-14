@@ -26,9 +26,9 @@ export default function ProductList({ products, loading, onEdit, onDelete }: Pro
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <h1 className={styles.title}>Products</h1>
-          <p className={styles.description}>
+          {/* <p className={styles.description}>
             A list of all products in your store including their name, category, price, and status.
-          </p>
+          </p> */}
         </div>
       </div>
 

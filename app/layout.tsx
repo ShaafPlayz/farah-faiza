@@ -8,7 +8,7 @@ const balooTammudu2 = Baloo_Tammudu_2({
 })
 
 export const metadata: Metadata = {
-  title: 'Zarab Collections - Modern Pakistani Clothing',
+  title: 'Zarab Collections',
   description: 'Zarab Collections offers inspiring feminine luxury with elegant, contemporary designs for the modern woman. Discover our collection of classic feminine clothing.',
 }
 
@@ -20,6 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/zarablogo.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/zarablogo.png" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
       <body className={`font-secondary text-gray-900 bg-white ${balooTammudu2.variable}`}>

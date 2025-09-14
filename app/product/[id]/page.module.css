@@ -4,27 +4,11 @@
   flex-direction: column;
 }
 
-.loading {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 1rem;
-}
+.loading { min-height:100vh; display:flex; align-items:center; justify-content:center; }
+.loadingContent { text-align:center; justify-items: center;}
 
-.loadingContent {
-  text-align: center;
-}
+.spinner { width:56px; height:56px; border:3px solid rgba(255,255,255,0.3); border-top-color:#d4af37; border-radius:50%; animation:spin .75s linear infinite; }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #ff6b6b;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
-}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -62,6 +46,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  margin-top: 7rem;
 }
 
 .breadcrumb {
@@ -78,7 +63,7 @@
 }
 
 .breadcrumbLink:hover {
-  color: #ff6b6b;
+  color: #fcd34d;
 }
 
 .productDetail {
@@ -97,6 +82,7 @@
 .mainImage {
   position: relative;
   width: 100%;
+  height: 100%;
   aspect-ratio: 1;
   border-radius: 10px;
   overflow: hidden;
@@ -127,7 +113,7 @@
 
 .thumbnail:hover,
 .thumbnailActive {
-  border-color: #ff6b6b;
+  border-color: #fcd34d;
 }
 
 .productInfo {
@@ -151,7 +137,7 @@
 .productPrice {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ff6b6b;
+  color: #fcd34d;
 }
 
 .productMeta {
@@ -201,12 +187,12 @@
 }
 
 .sizeButton:hover {
-  border-color: #ff6b6b;
+  border-color: #fcd34d;
 }
 
 .sizeButtonActive {
-  border-color: #ff6b6b;
-  background-color: #ff6b6b;
+  border-color: #fcd34d;
+  background-color: #fcd34d;
   color: white;
 }
 
@@ -232,7 +218,7 @@
 }
 
 .quantityButton:hover {
-  border-color: #ff6b6b;
+  border-color: #fcd34d;
 }
 
 .quantityDisplay {
@@ -250,7 +236,7 @@
 .addToCartButton {
   flex: 2;
   padding: 1rem 2rem;
-  background-color: #ff6b6b;
+  background-color: #fcd34d;
   color: white;
   border: none;
   border-radius: 5px;
@@ -261,7 +247,7 @@
 }
 
 .addToCartButton:hover:not(:disabled) {
-  background-color: #ff5252;
+  background-color: #fcd34d;
 }
 
 .addToCartButton:disabled {
@@ -273,8 +259,8 @@
   flex: 1;
   padding: 1rem 2rem;
   background: white;
-  color: #ff6b6b;
-  border: 2px solid #ff6b6b;
+  color: #fcd34d;
+  border: 2px solid #fcd34d;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
@@ -283,7 +269,7 @@
 }
 
 .viewCartButton:hover {
-  background-color: #ff6b6b;
+  background-color: #fcd34d;
   color: white;
 }
 

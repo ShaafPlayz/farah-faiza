@@ -7,6 +7,7 @@ import ProductForm from './ProductForm'
 import ProductList from './ProductList'
 import OrderList from './OrderList'
 import styles from './Dashboard.module.css'
+import Image from 'next/image'
 
 interface CartItem {
   id: number
@@ -188,7 +189,12 @@ export default function Dashboard({ user }: DashboardProps) {
         <div className={styles.headerContainer}>
           <div className={styles.headerContent}>
             <div className={styles.titleContainer}>
-              <h1>Zarab Collections</h1>
+              <Image 
+              src="/zarablogo.png" 
+              alt="ZC" 
+              width={70} 
+              height={70} 
+            />
               <p>Admin Dashboard</p>
             </div>
             <div className={styles.userSection}>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Management UML & Architecture</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body {font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif; margin: 0; padding: 2rem; background:#0f1115; color:#eef2f7; line-height:1.5;} 
+    h1,h2,h3 {font-weight:600; line-height:1.1;}
+    h1 {margin-top:0; font-size:2.2rem;}
+    a {color:#66c2ff}
+    code {background:#1e2530; padding:.15rem .4rem; border-radius:4px; font-size:.9rem;}
+    pre, .mermaid {background:#1b222c; padding:1rem; overflow:auto; border-radius:12px;}
+    .diagram {margin:2rem 0;}
+    .pill {display:inline-block; background:#243140; padding:.35rem .75rem; border-radius:999px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; color:#8ab4e0; margin:.25rem .4rem .25rem 0;}
+    .grid {display:grid; gap:1.5rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin:2rem 0;}
+    .card {background:#141a21; padding:1rem 1.1rem 1.3rem; border:1px solid #212b35; border-radius:10px;}
+    .card h3 {margin:.2rem 0 .6rem; font-size:1rem; letter-spacing:.04em; color:#9bd1ff;}
+    footer {margin-top:4rem; font-size:.75rem; opacity:.6;}
+    ol {padding-left:1.2rem;}
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+  </script>
+</head>
+<body>
+  <h1>Product Management: UML & Architecture</h1>
+  <p>This page shows the complete architecture for product management including admin CRUD operations and shop display functionality.</p>
+
+  <h2>Key Technologies</h2>
+  <div>
+    <span class="pill">Next.js App Router</span>
+    <span class="pill">React Client Components</span>
+    <span class="pill">Supabase Database</span>
+    <span class="pill">TypeScript</span>
+    <span class="pill">Base64 Image Storage</span>
+    <span class="pill">Authentication</span>
+    <span class="pill">File Upload</span>
+    <span class="pill">Drag & Drop</span>
+    <span class="pill">Form Validation</span>
+  </div>
+
+  <h2>Core Functions & Components</h2>
+  <div class="grid">
+    <div class="card"><h3>ProductForm</h3>Add/edit products with image upload, validation, and Supabase operations.</div>
+    <div class="card"><h3>ProductList</h3>Display admin product table with edit/delete actions and responsive design.</div>
+    <div class="card"><h3>ProductCard</h3>Shop page product display with image, name, price, and navigation link.</div>
+    <div class="card"><h3>ImageUpload</h3>Drag-and-drop image upload with base64 conversion and file validation.</div>
+    <div class="card"><h3>Dashboard</h3>Main admin interface managing products, orders, and navigation.</div>
+    <div class="card"><h3>Shop Page</h3>Product grid with filtering, sorting, and category management.</div>
+  </div>
+
+  <h2>Admin Product Management Flow</h2>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  autonumber
+  actor A as Admin User
+  participant L as Login
+  participant D as Dashboard
+  participant PF as ProductForm
+  participant PL as ProductList
+  participant IU as ImageUpload
+  participant SB as Supabase
+
+  A-&gt;&gt;L: Enter credentials
+  L-&gt;&gt;SB: Auth sign in
+  SB--&gt;&gt;L: Auth state change
+  L-&gt;&gt;D: Render Dashboard
+  D-&gt;&gt;SB: fetchProducts()
+  SB--&gt;&gt;D: products array
+  D-&gt;&gt;PL: Render ProductList
+  
+  A-&gt;&gt;D: Click Add Product
+  D-&gt;&gt;PF: Render ProductForm
+  A-&gt;&gt;IU: Upload image (drag/drop)
+  IU-&gt;&gt;IU: Convert to base64
+  IU--&gt;&gt;PF: Image data
+  A-&gt;&gt;PF: Fill form & submit
+  PF-&gt;&gt;PF: Validate form data
+  PF-&gt;&gt;SB: Insert product
+  SB--&gt;&gt;PF: Success/error
+  PF--&gt;&gt;D: Product saved
+  D-&gt;&gt;SB: Re-fetch products
+  SB--&gt;&gt;D: Updated products
+  D-&gt;&gt;PL: Re-render list
+    </div>
+  </div>
+
+  <h2>Shop Product Display Flow</h2>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as User
+  participant S as Shop Page
+  participant PC as ProductCard
+  participant PD as ProductDetail
+  participant SB as Supabase
+  participant LS as localStorage
+
+  U-&gt;&gt;S: Visit /shop
+  S-&gt;&gt;SB: fetchProducts()
+  SB--&gt;&gt;S: products array or fallback
+  S-&gt;&gt;S: Apply filters & sorting
+  S-&gt;&gt;PC: Render ProductCard grid
+  PC-&gt;&gt;PC: Display image, name, price
+  U-&gt;&gt;PC: Click product
+  PC-&gt;&gt;PD: Navigate to /product/:id
+  PD-&gt;&gt;SB: fetchProduct(id)
+  SB--&gt;&gt;PD: product data
+  PD-&gt;&gt;PD: Display full details
+  U-&gt;&gt;PD: Add to cart
+  PD-&gt;&gt;LS: Store cart item
+  PD--&gt;&gt;U: Confirmation
+    </div>
+  </div>
+
+  <h2>Component Architecture</h2>
+  <div class="diagram">
+    <div class="mermaid">
+graph TD
+  subgraph Admin["Admin Interface"]
+    LP[Login Page]
+    DB[Dashboard]
+    PF[ProductForm]
+    PL[ProductList]
+    IU[ImageUpload]
+    OL[OrderList]
+  end
+  
+  subgraph Shop["Shop Interface"]
+    SP[Shop Page]
+    PC[ProductCard]
+    PD[ProductDetail]
+    HD[Header]
+    FT[Footer]
+  end
+  
+  subgraph Data["Data Layer"]
+    SB[(Supabase)]
+    LS[(localStorage)]
+    AUTH[Auth State]
+  end
+  
+  subgraph Types["Type Definitions"]
+    PROD[Product Type]
+    CART[CartItem Type]
+    ORD[Order Type]
+  end
+
+  LP --&gt; AUTH
+  AUTH --&gt; DB
+  DB --&gt; PF
+  DB --&gt; PL
+  DB --&gt; OL
+  PF --&gt; IU
+  PF --&gt; SB
+  PL --&gt; SB
+  
+  SP --&gt; SB
+  SP --&gt; PC
+  PC --&gt; PD
+  PD --&gt; SB
+  PD --&gt; LS
+  
+  SB --&gt; PROD
+  LS --&gt; CART
+  SB --&gt; ORD
+
+  classDef admin fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+  classDef shop fill:#3d2d55,stroke:#6b4fa8,color:#f7f1ff
+  classDef data fill:#293545,stroke:#3d526b,color:#f2f8ff
+  classDef types fill:#1d2731,stroke:#314657,color:#f5fbff
+
+  class LP,DB,PF,PL,IU,OL admin
+  class SP,PC,PD,HD,FT shop
+  class SB,LS,AUTH data
+  class PROD,CART,ORD types
+    </div>
+  </div>
+
+  <h2>Product CRUD Operations</h2>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TD
+  START([Admin Login])
+  DASH[Dashboard]
+  
+  subgraph CREATE["Create Product"]
+    ADD[Add Product Tab]
+    FORM[ProductForm]
+    IMG[ImageUpload]
+    VALID[Validate Form]
+    INSERT[Supabase Insert]
+  end
+  
+  subgraph READ["Read Products"]
+    FETCH[Fetch Products]
+    LIST[ProductList Display]
+    SHOP[Shop Page Display]
+    CARD[ProductCard Grid]
+  end
+  
+  subgraph UPDATE["Update Product"]
+    EDIT[Edit Button]
+    LOAD[Load ProductForm]
+    MODIFY[Modify Data]
+    UPDATE_DB[Supabase Update]
+  end
+  
+  subgraph DELETE["Delete Product"]
+    DEL[Delete Button]
+    CONFIRM[Confirm Dialog]
+    REMOVE[Supabase Delete]
+  end
+
+  START --&gt; DASH
+  DASH --&gt; ADD
+  DASH --&gt; FETCH
+  DASH --&gt; EDIT
+  DASH --&gt; DEL
+  
+  ADD --&gt; FORM
+  FORM --&gt; IMG
+  FORM --&gt; VALID
+  VALID --&gt; INSERT
+  INSERT --&gt; FETCH
+  
+  FETCH --&gt; LIST
+  FETCH --&gt; SHOP
+  SHOP --&gt; CARD
+  
+  EDIT --&gt; LOAD
+  LOAD --&gt; MODIFY
+  MODIFY --&gt; UPDATE_DB
+  UPDATE_DB --&gt; FETCH
+  
+  DEL --&gt; CONFIRM
+  CONFIRM --&gt; REMOVE
+  REMOVE --&gt; FETCH
+
+  classDef create fill:#2d5530,stroke:#4a8b57,color:#f0f8f0
+  classDef read fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+  classDef update fill:#5a4a2d,stroke:#8b7a4a,color:#f8f5f0
+  classDef delete fill:#5a2d2d,stroke:#8b4a4a,color:#f8f0f0
+
+  class ADD,FORM,IMG,VALID,INSERT create
+  class FETCH,LIST,SHOP,CARD read
+  class EDIT,LOAD,MODIFY,UPDATE_DB update
+  class DEL,CONFIRM,REMOVE delete
+    </div>
+  </div>
+
+  <h2>Data Flow & State Management</h2>
+  <div class="diagram">
+    <div class="mermaid">
+graph LR
+  subgraph Client["Client Side"]
+    COMP[React Components]
+    STATE[Component State]
+    FORM[Form Data]
+    IMG[Image Base64]
+  end
+  
+  subgraph Server["Server Side"]
+    API[Supabase API]
+    DB[(Database)]
+    AUTH[Authentication]
+    STORAGE[Image Storage]
+  end
+  
+  subgraph Fallback["Fallback System"]
+    SAMPLE[Sample Data]
+    MOCK[Mock Client]
+    ERR[Error Handling]
+  end
+
+  COMP --&gt; STATE
+  FORM --&gt; IMG
+  STATE --&gt; API
+  IMG --&gt; STORAGE
+  API --&gt; DB
+  API --&gt; AUTH
+  
+  API -.-> ERR
+  ERR --&gt; SAMPLE
+  ERR --&gt; MOCK
+  SAMPLE --&gt; COMP
+
+  classDef client fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+  classDef server fill:#3d2d55,stroke:#6b4fa8,color:#f7f1ff
+  classDef fallback fill:#5a2d2d,stroke:#8b4a4a,color:#f8f0f0
+
+  class COMP,STATE,FORM,IMG client
+  class API,DB,AUTH,STORAGE server
+  class SAMPLE,MOCK,ERR fallback
+    </div>
+  </div>
+
+  <h2>Product Type Structure</h2>
+  <pre>type Product = {
+  id: number
+  name: string
+  description: string
+  price: number
+  image_url: string
+  image_data?: string      // Base64 encoded
+  category: string         // "Dresses" | "Tops" | "Bottoms" | "Outerwear"
+  collection?: string
+  sizes: string[]         // ["XS", "S", "M", "L", "XL"]
+  created_at: string
+  updated_at: string
+}</pre>
+
+  <h2>Key Functions Breakdown</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>fetchProducts()</h3>
+      <p><strong>Location:</strong> Dashboard, Shop Page</p>
+      <p><strong>Purpose:</strong> Get all products from Supabase with fallback to sample data</p>
+      <p><strong>Error Handling:</strong> Console log + fallback data</p>
+    </div>
+    <div class="card">
+      <h3>handleSubmit()</h3>
+      <p><strong>Location:</strong> ProductForm</p>
+      <p><strong>Purpose:</strong> Validate form, process image, insert/update product</p>
+      <p><strong>Validation:</strong> Required fields, image upload, price format</p>
+    </div>
+    <div class="card">
+      <h3>handleDeleteProduct()</h3>
+      <p><strong>Location:</strong> Dashboard</p>
+      <p><strong>Purpose:</strong> Confirm deletion and remove from database</p>
+      <p><strong>UX:</strong> Confirmation dialog + immediate UI update</p>
+    </div>
+    <div class="card">
+      <h3>onDrop()</h3>
+      <p><strong>Location:</strong> ImageUpload</p>
+      <p><strong>Purpose:</strong> Process file upload, convert to base64</p>
+      <p><strong>Validation:</strong> File size (2MB max), file type</p>
+    </div>
+    <div class="card">
+      <h3>Filter & Sort</h3>
+      <p><strong>Location:</strong> Shop Page</p>
+      <p><strong>Purpose:</strong> Category filtering and price/popularity sorting</p>
+      <p><strong>Categories:</strong> All, Dresses, Tops, Bottoms</p>
+    </div>
+    <div class="card">
+      <h3>getSampleProducts()</h3>
+      <p><strong>Location:</strong> Shop, ProductDetail</p>
+      <p><strong>Purpose:</strong> Provide fallback data when Supabase unavailable</p>
+      <p><strong>Development:</strong> Ensures app works offline</p>
+    </div>
+  </div>
+
+  <h2>Error Handling & Fallbacks</h2>
+  <ol>
+    <li><strong>Database Connection:</strong> Falls back to sample/mock data</li>
+    <li><strong>Image Upload:</strong> Validates file size and handles conversion errors</li>
+    <li><strong>Form Validation:</strong> Client-side validation with user feedback</li>
+    <li><strong>Authentication:</strong> Mock client for development environment</li>
+    <li><strong>Network Issues:</strong> Graceful degradation with local storage</li>
+  </ol>
+
+  <h2>Navigation Flow</h2>
+  <div class="diagram">
+    <div class="mermaid">
+graph TD
+  HOME[Home Page]
+  SHOP[Shop Page /shop]
+  PROD[Product Detail /product/:id]
+  ADMIN[Admin Login /admin]
+  DASH[Admin Dashboard]
+  
+  HOME --&gt; SHOP
+  SHOP --&gt; PROD
+  PROD --&gt; SHOP
+  
+  ADMIN --&gt; DASH
+  DASH --&gt; ADMIN
+  
+  SHOP -.-> ADMIN
+  DASH -.-> HOME
+
+  classDef public fill:#2d4356,stroke:#4a6fa5,color:#f2f8ff
+  classDef admin fill:#3d2d55,stroke:#6b4fa8,color:#f7f1ff
+
+  class HOME,SHOP,PROD public
+  class ADMIN,DASH admin
+    </div>
+  </div>
+
+  <footer>Complete product management architecture for admin and shop functionality. Open at http://localhost:3000/product-management-uml.html</footer>
+</body>
+</html>
