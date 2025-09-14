@@ -67,17 +67,16 @@ export default function ProductList({ products, loading, onEdit, onDelete }: Pro
                         <td className={styles.tableCell}>
                           <div className={styles.productInfo}>
                             <div className={styles.productImage}>
-                              <Image
+                              <Image 
                                 className={styles.productImageImg}
-                                src={
-                                  ([...(product.image_data_array ?? []), ...(product.image_urls ?? [])]
-                                    .find((s) => {
-                                      const v = typeof s === 'string' ? s.trim() : ''
-                                      return v.length > 0 && /^(data:image\/|https?:\/\/|\/)/.test(v)
-                                    }) || '/zarablogo.png'
-                                }
+                                src={([...(product.image_data_array ?? []), ...(product.image_urls ?? [])].find((s) => {
+                                  const v = typeof s === 'string' ? s.trim() : '';
+                                  return v.length > 0 && /^(data:image\/|https?:\/\/|\/)/.test(v);
+                                }) || '/zarablogo.png')}
                                 alt={product.name}
-                                fill
+                                width={64}
+                                height={64}
+                                style={{ objectFit: 'cover' }}
                               />
                             </div>
                             <div className={styles.productDetails}>

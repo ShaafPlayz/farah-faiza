@@ -110,7 +110,9 @@ export default function MultiImageUpload({
               <Image
                 src={preview}
                 alt={`Product image ${imageIndex + 1}`}
-                fill
+                width={200}
+                height={200}
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                 className={styles.previewImageInner}
               />
             </div>
