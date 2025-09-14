@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase, type Product } from '@/lib/supabase'
-import ImageUpload from './ImageUpload'
+import MultiImageUpload from './MultiImageUpload'
 import styles from './ProductForm.module.css'
 
 interface ProductFormProps {
@@ -16,8 +16,7 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
     name: '',
     description: '',
     price: '',
-    image_url: '',
-    image_data: '',
+    image_data_array: [] as string[],
     category: '',
     collection: '',
     sizes: [] as string[]
@@ -31,8 +30,7 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
         name: product.name,
         description: product.description,
         price: product.price.toString(),
-        image_url: product.image_url,
-        image_data: product.image_data || '',
+        image_data_array: product.image_data_array || product.image_urls || [],
         category: product.category,
         collection: product.collection || '',
         sizes: product.sizes
@@ -42,14 +40,29 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
         name: '',
         description: '',
         price: '',
-        image_url: '',
-        image_data: '',
+        image_data_array: [],
         category: '',
         collection: '',
         sizes: []
       })
     }
   }, [product])
+
+  const handleImageChange = (images: string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      image_data_array: images
+    }))
+    
+    // Clear image-related errors
+    if (images.length > 0 && error.includes('image')) {
+      setError('')
+    }
+  }
+
+  const handleImageError = (errorMessage: string) => {
+    setError(errorMessage)
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -64,8 +77,8 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
         return
       }
 
-      if (!formData.image_data && !formData.image_url) {
-        setError('Please upload a product image')
+      if (!formData.image_data_array || formData.image_data_array.length === 0) {
+        setError('Please upload at least one product image')
         setLoading(false)
         return
       }
@@ -74,8 +87,8 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
         name: formData.name,
         description: formData.description,
         price: parseFloat(formData.price),
-        image_url: formData.image_data || formData.image_url, // Use image_data if available, fallback to image_url
-        image_data: formData.image_data,
+        image_urls: formData.image_data_array,
+        image_data_array: formData.image_data_array,
         category: formData.category,
         collection: formData.collection || null,
         sizes: formData.sizes
@@ -112,18 +125,6 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
         ? prev.sizes.filter(s => s !== size)
         : [...prev.sizes, size]
     }))
-  }
-
-  function handleImageChange(imageData: string) {
-    setFormData(prev => ({ ...prev, image_data: imageData }))
-    // Clear any previous errors when image is successfully uploaded
-    if (imageData && error.includes('image')) {
-      setError('')
-    }
-  }
-
-  function handleImageError(errorMessage: string) {
-    setError(errorMessage)
   }
 
   return (
@@ -185,11 +186,14 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
               />
             </div>
 
-            <ImageUpload
-              currentImageData={formData.image_data}
-              onImageChange={handleImageChange}
-              onError={handleImageError}
-            />
+            <div className={styles.fieldGroup}>
+              <MultiImageUpload
+                currentImages={formData.image_data_array}
+                onImagesChange={handleImageChange}
+                onError={handleImageError}
+                maxImages={3}
+              />
+            </div>
 
             <div className={styles.fieldGroup}>
               <label htmlFor="category" className={styles.label}>

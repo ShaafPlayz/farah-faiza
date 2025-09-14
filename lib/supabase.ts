@@ -103,8 +103,8 @@ export type Product = {
   name: string
   description: string
   price: number
-  image_url: string
-  image_data?: string // Base64 encoded image data
+  image_urls: string[] // Array of image URLs
+  image_data_array?: string[] // Array of Base64 encoded image data
   category: string
   collection?: string
   sizes: string[]

@@ -62,8 +62,8 @@ export default function ProductDetail() {
         name: "Floral Print Dress",
         description: "Beautiful floral print dress perfect for any occasion. Made with high-quality fabric that ensures comfort and durability. Features a flattering silhouette that complements all body types.",
         price: 4990,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: ["/zarablogo.png"],
+        image_data_array: [],
         category: "Dresses",
         collection: "Summer Collection",
         sizes: ["XS", "S", "M", "L", "XL"],
@@ -75,8 +75,8 @@ export default function ProductDetail() {
         name: "Silk Blouse",
         description: "Elegant silk blouse for professional wear. Crafted from premium silk fabric with attention to detail. Perfect for office wear or formal occasions.",
         price: 3490,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: ["/zarablogo.png"],
+        image_data_array: [],
         category: "Tops",
         collection: "Professional",
         sizes: ["XS", "S", "M", "L", "XL"],
@@ -88,8 +88,8 @@ export default function ProductDetail() {
         name: "Tailored Pants",
         description: "Perfect fit tailored pants that offer both style and comfort. Made with stretch fabric for all-day comfort while maintaining a professional look.",
         price: 3990,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: ["/zarablogo.png"],
+        image_data_array: [],
         category: "Bottoms",
         collection: "Professional",
         sizes: ["XS", "S", "M", "L", "XL"],
@@ -101,8 +101,8 @@ export default function ProductDetail() {
         name: "Embroidered Top",
         description: "Handcrafted embroidered top featuring intricate traditional designs. Each piece is unique and showcases the beauty of traditional craftsmanship.",
         price: 2990,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: ["/zarablogo.png"],
+        image_data_array: [],
         category: "Tops",
         collection: "Traditional",
         sizes: ["XS", "S", "M", "L", "XL"],
@@ -121,11 +121,16 @@ export default function ProductDetail() {
 
     setAddingToCart(true)
     
+    const firstImage = ([...(product.image_data_array ?? []), ...(product.image_urls ?? [])]
+      .find((s) => {
+        const v = typeof s === 'string' ? s.trim() : ''
+        return v.length > 0 && /^(data:image\/|https?:\/\/|\/)/.test(v)
+      })) || '/zarablogo.png'
     const cartItem: CartItem = {
       id: product.id,
       name: product.name,
       price: product.price,
-      image_url: product.image_data || product.image_url,
+      image_url: firstImage,
       size: selectedSize,
       quantity: quantity
     }
@@ -182,11 +187,11 @@ export default function ProductDetail() {
     )
   }
 
-  const images = [
-    product.image_data || product.image_url,
-    product.image_data || product.image_url,
-    product.image_data || product.image_url
-  ]
+  const imageCandidates = [
+    ...(Array.isArray(product.image_data_array) ? product.image_data_array : []),
+    ...(Array.isArray(product.image_urls) ? product.image_urls : []),
+  ].filter((s) => typeof s === 'string' && s.trim().length > 0)
+  const images = imageCandidates.length > 0 ? imageCandidates : ['/zarablogo.png']
 
   return (
     <main className={styles.main}>
@@ -213,21 +218,23 @@ export default function ProductDetail() {
             </div>
 
             {/* Thumbnails */}
-            {/* <div className={styles.thumbnails}>
-              {images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImageIndex(index)}
-                  className={`${styles.thumbnail} ${selectedImageIndex === index ? styles.thumbnailActive : ''}`}
-                >
-                  <Image
-                    src={image}
-                    alt={`${product.name} ${index + 1}`}
-                    fill
-                  />
-                </button>
-              ))}
-            </div> */}
+            {images.length > 1 && (
+              <div className={styles.thumbnails}>
+                {images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`${styles.thumbnail} ${selectedImageIndex === index ? styles.thumbnailActive : ''}`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${product.name} ${index + 1}`}
+                      fill
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className={styles.productInfo}>

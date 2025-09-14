@@ -8,8 +8,12 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  // Use image_data if available, otherwise fall back to image_url
-  const imageSrc = product.image_data || product.image_url
+  // Pick the first non-empty string from image arrays
+  const imageSrc = ([...(product.image_data_array ?? []), ...(product.image_urls ?? [])]
+    .find((s) => {
+      const v = typeof s === 'string' ? s.trim() : ''
+      return v.length > 0 && /^(data:image\/|https?:\/\/|\/)/.test(v)
+    })) || '/zarablogo.png'
 
   return (
     <div className={`product-card ${styles.productCard}`}>

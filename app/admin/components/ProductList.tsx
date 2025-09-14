@@ -69,7 +69,13 @@ export default function ProductList({ products, loading, onEdit, onDelete }: Pro
                             <div className={styles.productImage}>
                               <Image
                                 className={styles.productImageImg}
-                                src={product.image_data || product.image_url}
+                                src={
+                                  ([...(product.image_data_array ?? []), ...(product.image_urls ?? [])]
+                                    .find((s) => {
+                                      const v = typeof s === 'string' ? s.trim() : ''
+                                      return v.length > 0 && /^(data:image\/|https?:\/\/|\/)/.test(v)
+                                    }) || '/zarablogo.png'
+                                }
                                 alt={product.name}
                                 fill
                               />

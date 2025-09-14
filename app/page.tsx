@@ -106,22 +106,25 @@ export default function Home() {
 
           <div className={styles.productGrid}>
             {sortedProducts.map((p) => (
-              <div key={p.id} className={styles.productCard}>  
-              <Link href={`/product/${p.id}`} className={styles.productLink}>             
+              <div key={p.id} className={styles.productCard}>
+                <Link href={`/product/${p.id}`} className={styles.productLink}>
                   <div className={styles.productImage} key={p.id}>
                     <Image
-                          src={p.image_data ?? "/zarablogo.png"}
-                          alt='404 Not Found'
-                          fill
-                        />                                       
+                      src={([...(p.image_data_array ?? []), ...(p.image_urls ?? [])]
+                        .find((s) => {
+                          const v = typeof s === 'string' ? s.trim() : ''
+                          return v.length > 0 && /^(data:image\/|https?:\/\/|\/)/.test(v)
+                        }) || "/zarablogo.png")}
+                      alt={p.name}
+                      fill
+                    />
                   </div>
-                <div className={`product-info ${styles.productInfo}`}>
-                  <h3 >{p.name}</h3>
-                  <p className={`product-price ${styles.productPrice}`}>Rs. {p.price.toLocaleString()}</p>
-                </div>
+                  <div className={`product-info ${styles.productInfo}`}>
+                    <h3>{p.name}</h3>
+                    <p className={`product-price ${styles.productPrice}`}>Rs. {p.price.toLocaleString()}</p>
+                  </div>
                 </Link>
               </div>
-              
             ))}
           </div>
         </div>

@@ -56,14 +56,15 @@ export default function Shop() {
   }
 
   function getSampleProducts(): Product[] {
+    const defaultImages = ["/zarablogo.png"]
     return [
       {
         id: 1,
         name: "Floral Print Dress",
         description: "Beautiful floral print dress for any occasion",
         price: 4990,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: defaultImages,
+        image_data_array: [],
         category: "Dresses",
         collection: "Summer Collection",
         sizes: ["XS", "S", "M", "L", "XL"],
@@ -75,8 +76,8 @@ export default function Shop() {
         name: "Silk Blouse",
         description: "Elegant silk blouse for professional wear",
         price: 3490,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: defaultImages,
+        image_data_array: [],
         category: "Tops",
         collection: "Professional",
         sizes: ["XS", "S", "M", "L"],
@@ -88,8 +89,8 @@ export default function Shop() {
         name: "Tailored Pants",
         description: "Perfect fit tailored pants",
         price: 3990,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: defaultImages,
+        image_data_array: [],
         category: "Bottoms",
         collection: "Professional",
         sizes: ["XS", "S", "XL"],
@@ -101,8 +102,8 @@ export default function Shop() {
         name: "Embroidered Top",
         description: "Handcrafted embroidered top",
         price: 2990,
-        image_url: "/images/product-1.jpeg",
-        image_data: "",
+        image_urls: defaultImages,
+        image_data_array: [],
         category: "Tops",
         collection: "Traditional",
         sizes: ["XS"],
@@ -113,9 +114,11 @@ export default function Shop() {
   }
 
   const filteredProducts = products.filter(product => {
-    const matchedCategory = filter === 'all' || product.category.toLowerCase() === filter.toLowerCase()
+    const categoryStr = (product?.category || '').toString().toLowerCase()
+    const matchedCategory = filter === 'all' || categoryStr === filter.toLowerCase()
 
-    const matchedSizes = selectedSize === 'all' || product.sizes.includes(selectedSize)
+    const sizesArr = Array.isArray(product?.sizes) ? product.sizes : []
+    const matchedSizes = selectedSize === 'all' || sizesArr.includes(selectedSize)
 
     return matchedSizes && matchedCategory
   })
