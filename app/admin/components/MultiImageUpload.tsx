@@ -61,14 +61,14 @@ export default function MultiImageUpload({
     }
   }, [onImagesChange, onError])
 
-  // Create dropzones for each image slot at the component level
-  const dropzones = Array.from({ length: maxImages }, (_, i) => {
+  // Create dropzones and onDrop handlers at the top level for each image slot
+  const dropzones = Array.from({ length: maxImages }, (_, imageIndex) => {
     const onDrop = useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
       if (file) {
-        processImage(file, i)
+        processImage(file, imageIndex)
       }
-    }, [i])
+    }, [imageIndex, processImage])
 
     return useDropzone({
       onDrop,
@@ -76,7 +76,7 @@ export default function MultiImageUpload({
         'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
       },
       multiple: false,
-      disabled: uploading === i
+      disabled: uploading === imageIndex
     })
   })
 
@@ -104,7 +104,6 @@ export default function MultiImageUpload({
     return (
       <div key={imageIndex} className={styles.imageSlot}>
         <label className={styles.label}>{label}</label>
-        
         {preview ? (
           <div className={styles.previewContainer}>
             <div className={styles.previewImage}>

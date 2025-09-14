@@ -74,7 +74,7 @@ export default function ProductList({ products, loading, onEdit, onDelete }: Pro
                                     .find((s) => {
                                       const v = typeof s === 'string' ? s.trim() : ''
                                       return v.length > 0 && /^(data:image\/|https?:\/\/|\/)/.test(v)
-                                    }) || '/zarablogo.png')
+                                    }) || '/zarablogo.png'
                                 }
                                 alt={product.name}
                                 fill
