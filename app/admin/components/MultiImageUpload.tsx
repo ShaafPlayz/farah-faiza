@@ -61,13 +61,14 @@ export default function MultiImageUpload({
     }
   }, [onImagesChange, onError])
 
-  const createDropzone = (imageIndex: number) => {
+  // Create dropzones for each image slot at the component level
+  const dropzones = Array.from({ length: maxImages }, (_, i) => {
     const onDrop = useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
       if (file) {
-        processImage(file, imageIndex)
+        processImage(file, i)
       }
-    }, [imageIndex])
+    }, [i])
 
     return useDropzone({
       onDrop,
@@ -75,9 +76,9 @@ export default function MultiImageUpload({
         'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
       },
       multiple: false,
-      disabled: uploading === imageIndex
+      disabled: uploading === i
     })
-  }
+  })
 
   const removeImage = (imageIndex: number) => {
     setPreviews(prev => {
@@ -95,7 +96,7 @@ export default function MultiImageUpload({
 
   const renderImageSlot = (imageIndex: number) => {
     const preview = previews[imageIndex]
-    const dropzone = createDropzone(imageIndex)
+    const dropzone = dropzones[imageIndex]
     const isUploading = uploading === imageIndex
     const isRequired = imageIndex === 0
     const label = imageIndex === 0 ? 'Main Image *' : `Image ${imageIndex + 1}`
