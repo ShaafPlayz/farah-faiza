@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
 import styles from './MultiImageUpload.module.css'
@@ -60,25 +60,32 @@ export default function MultiImageUpload({
       setUploading(null)
     }
   }, [onImagesChange, onError])
-
-  // Create dropzones and onDrop handlers at the top level for each image slot
-  const dropzones = Array.from({ length: maxImages }, (_, imageIndex) => {
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-      const file = acceptedFiles[0]
-      if (file) {
-        processImage(file, imageIndex)
+  
+  // Define onDrop callbacks for each index at the top level
+  const onDropCallbacks = useMemo(() => {
+    return Array.from({ length: maxImages }, (_, imageIndex) => {
+      return (acceptedFiles: File[]) => {
+        const file = acceptedFiles[0]
+        if (file) {
+          processImage(file, imageIndex)
+        }
       }
-    }, [imageIndex, processImage])
-
-    return useDropzone({
-      onDrop,
-      accept: {
-        'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
-      },
-      multiple: false,
-      disabled: uploading === imageIndex
     })
-  })
+  }, [maxImages, processImage])
+  
+  // Create dropzones at the top level
+  const dropzones = useMemo(() => {
+    return Array.from({ length: maxImages }, (_, imageIndex) => {
+      return useDropzone({
+        onDrop: onDropCallbacks[imageIndex],
+        accept: {
+          'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
+        },
+        multiple: false,
+        disabled: uploading === imageIndex
+      })
+    })
+  }, [maxImages, onDropCallbacks, uploading])
 
   const removeImage = (imageIndex: number) => {
     setPreviews(prev => {
