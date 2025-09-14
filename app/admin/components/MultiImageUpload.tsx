@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
 import styles from './MultiImageUpload.module.css'
@@ -62,30 +62,56 @@ export default function MultiImageUpload({
   }, [onImagesChange, onError])
   
   // Define onDrop callbacks for each index at the top level
-  const onDropCallbacks = useMemo(() => {
-    return Array.from({ length: maxImages }, (_, imageIndex) => {
-      return (acceptedFiles: File[]) => {
-        const file = acceptedFiles[0]
-        if (file) {
-          processImage(file, imageIndex)
-        }
-      }
-    })
-  }, [maxImages, processImage])
+  const onDrop0 = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0]
+    if (file) {
+      processImage(file, 0)
+    }
+  }, [processImage])
+  
+  const onDrop1 = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0]
+    if (file) {
+      processImage(file, 1)
+    }
+  }, [processImage])
+  
+  const onDrop2 = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0]
+    if (file) {
+      processImage(file, 2)
+    }
+  }, [processImage])
   
   // Create dropzones at the top level
-  const dropzones = useMemo(() => {
-    return Array.from({ length: maxImages }, (_, imageIndex) => {
-      return useDropzone({
-        onDrop: onDropCallbacks[imageIndex],
-        accept: {
-          'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
-        },
-        multiple: false,
-        disabled: uploading === imageIndex
-      })
-    })
-  }, [maxImages, onDropCallbacks, uploading])
+  const dropzone0 = useDropzone({
+    onDrop: onDrop0,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
+    },
+    multiple: false,
+    disabled: uploading === 0
+  })
+  
+  const dropzone1 = useDropzone({
+    onDrop: onDrop1,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
+    },
+    multiple: false,
+    disabled: uploading === 1
+  })
+  
+  const dropzone2 = useDropzone({
+    onDrop: onDrop2,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
+    },
+    multiple: false,
+    disabled: uploading === 2
+  })
+  
+  const dropzones = [dropzone0, dropzone1, dropzone2]
 
   const removeImage = (imageIndex: number) => {
     setPreviews(prev => {
