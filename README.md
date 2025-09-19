@@ -1,58 +1,14 @@
 # Zarab Collections - Next.js E-commerce Application
 
-A modern e-commerce website for feminine ready-to-wear clothing built with Next.js, TypeScript, and Supabase.
+An e-commerce website for clothing built with Next.js, TypeScript, and Supabase.
 
-## Features
-
-- **Public Website**: Homepage and shop page with elegant design
-- **Seller Authentication**: Secure login system for sellers
-- **Admin Dashboard**: Complete product management system
-- **Product Management**: Add, edit, and delete products with images
-- **Responsive Design**: Mobile-friendly interface
-- **Database Integration**: Supabase for authentication and data storage
-- **Runtime Environment Variables**: Environment variables are only accessed at runtime, not during build
-
-## Technologies Used
+Used
 
 - **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Custom CSS Modules
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
-- **Deployment**: Docker-ready with GitHub Actions CI/CD
+- **Deployment**: Docker-ready with GitHub Actions CI/CD on Digital Ocean
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ installed
-- Supabase account
-- Git
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd farah-faiza
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   
-   Copy `.env.example` to `.env.local` and update with your Supabase credentials:
-   ```bash
-   cp .env.example .env.local
-   ```
-   
-   Edit `.env.local`:
-   ```bash
-   SUPABASE_URL=your_supabase_project_url
-   SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
 
 ## Environment Variables
 
